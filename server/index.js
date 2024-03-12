@@ -7,9 +7,11 @@ const app = express();
 const mongoose = require("mongoose");
 const DB_URL = process.env.MONGO_DB_URL ; 
 const cors = require("cors");
+const path = require("path");
 
 const userRoutes  = require("./routes/userRoute");
-const path = require("path");
+const authRoutes = require("./routes/authRoute");
+const ExpressError = require("./utils/ExpressError");
 
 main().then(()=> {
     console.log("Server Connected with DB successfully!");
@@ -29,7 +31,18 @@ app.use(express.static(path.join(__dirname , "public")));
 
 
 //testing route 
-app.use("/" , userRoutes);
+app.use("/api/user" , userRoutes);
+app.use("/api/auth", authRoutes );
+
+app.all("*" , (req ,res , next)=> {
+    next(new ExpressError(404 , "Page Not Found"));
+});
+
+//custome error middleware 
+app.use((err, req ,res , next)=> {
+    let { status = 500 , message = "SOME ERROR OCCURED!" } = err ; 
+    res.status(status).send(message);
+});
 
 app.listen(port , ()=> {
     console.log(`server is  running on port ${port}`);
