@@ -5,7 +5,7 @@ const bcryptjs = require("bcryptjs");
 module.exports.signupController = async(req ,res)=> {
     let { user } = req.body ; 
     if(!user) {
-        throw new  ExpressError(400 ,"Send valid data to signup")
+        throw new  ExpressError(400 ,"Send valid user data to signup")
     }
 
     const hashPassword  = bcryptjs.hashSync(user.password , 10);

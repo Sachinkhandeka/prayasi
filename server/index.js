@@ -40,8 +40,12 @@ app.all("*" , (req ,res , next)=> {
 
 //custome error middleware 
 app.use((err, req ,res , next)=> {
-    let { status = 500 , message = "SOME ERROR OCCURED!" } = err ; 
-    res.status(status).send(message);
+    let { status = 500 , message = "INTERNAL SERVER ERROR !" } = err ; 
+    res.status(status).json({
+        success : false,
+        statusCode : status,
+        message
+    });
 });
 
 app.listen(port , ()=> {
