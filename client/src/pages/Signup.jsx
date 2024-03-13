@@ -3,6 +3,7 @@ import { Alert } from "flowbite-react";
 import Brand from "../components/Brand";
 import { Link , useNavigate } from "react-router-dom";
 import { useState } from "react";
+import OAuth from "../components/OAuth";
 
 export  default function Signup() {
     const [ formData , setFormData ] = useState([]);
@@ -99,6 +100,7 @@ export  default function Signup() {
                     >
                         { loading ? (<><Spinner size="sm" /><span className="pl-3" >Loading ...</span></>) : 'Sign up' }
                     </Button>
+                    <OAuth />
                 </form>
                 <div className="flex gap-2 mt-5 text-sm" >
                     <span>Have an Account?</span>
