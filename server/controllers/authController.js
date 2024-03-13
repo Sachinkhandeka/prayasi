@@ -42,18 +42,18 @@ module.exports.signupController = async(req ,res)=> {
 }
 
 module.exports.signinController = async(req ,res)=> {
-    const { email , password } = req.body ;
+    const { user } = req.body ;
 
-    if(!email || !password || email === '' || password === '') {
+    if(!user.email || !user.password || user.email === '' || user.password === '') {
         throw new ExpressError(400 , "Please enter username and password.");
     }
 
-    const validUser = await User.findOne({ email : email });
+    const validUser = await User.findOne({ email : user.email });
 
     if(!validUser) {
         throw new ExpressError(404 , "User not found");
     }
-    const validPass = bcryptjs.compareSync(password , validUser.password);
+    const validPass = bcryptjs.compareSync(user.password , validUser.password);
 
     if(!validPass) {
         throw new ExpressError(400 , "Invalid password");
