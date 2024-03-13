@@ -12,6 +12,7 @@ const Projects = React.lazy(()=> import("./pages/Projects"));
 
 //components import 
 import Header from "./components/Header";
+import FooterComponent from "./components/Footer";
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
         <Route path="/dashboard" element={ <Suspense fallback={<div>Loading ...</div>} ><Dashboard /></Suspense> }/>
         <Route path="/projects" element={ <Suspense fallback={<div>Loading ...</div>}><Projects /></Suspense> }/>
       </Routes>
+      <FooterComponent />
     </BrowserRouter>
     </>
   )
