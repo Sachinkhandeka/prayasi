@@ -1,6 +1,8 @@
 const User = require("../models/user");
 const ExpressError = require("../utils/ExpressError");
 const bcryptjs = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const secret = process.env.JWT_SECRET_KEY ;
 
 module.exports.signupController = async(req ,res)=> {
     let { user } = req.body ; 
@@ -37,4 +39,31 @@ module.exports.signupController = async(req ,res)=> {
     await newUser.save();
 
     res.send("Welcome to Prayasi!!");
+}
+
+module.exports.signinController = async(req ,res)=> {
+    const { email , password } = req.body ;
+
+    if(!email || !password || email === '' || password === '') {
+        throw new ExpressError(400 , "Please enter username and password.");
+    }
+
+    const validUser = await User.findOne({ email : email });
+
+    if(!validUser) {
+        throw new ExpressError(404 , "User not found");
+    }
+    const validPass = bcryptjs.compareSync(password , validUser.password);
+
+    if(!validPass) {
+        throw new ExpressError(400 , "Invalid password");
+    }
+
+    const token = jwt.sign({id : validUser._id}, secret);
+    const { password : pass ,  ...rest } = validUser._doc ; 
+
+    res.status(200).cookie("access_token" , token , {
+        httpOnly : true
+    }).json(rest);
+
 }

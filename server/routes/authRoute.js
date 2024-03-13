@@ -7,5 +7,9 @@ router.post(
     "/signup",
     wrapAsync(authController.signupController)
 );
+router.post(
+    "/signin",
+    wrapAsync(authController.signinController)
+)
 
 module.exports = router ; 
