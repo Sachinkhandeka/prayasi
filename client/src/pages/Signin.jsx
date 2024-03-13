@@ -3,11 +3,13 @@ import { Alert } from "flowbite-react";
 import Brand from "../components/Brand";
 import { useState } from "react";
 import { Link , useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { signInStarts , signInSuccess , signInFailure } from "../redux/user/userSlice";
 
 export default function Signin() {
     const [formData , setFormData] = useState([]);
-    const [ errMsg , setErrMsg ] = useState(null);
-    const [loading , setLoading] = useState(false);
+    const {loading , error : errMsg} = useSelector( state => state.user);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleChange = (e)=> {
@@ -19,15 +21,12 @@ export default function Signin() {
 
     const handleSubmit = async(e)=> {
         e.preventDefault();
-        setLoading(true);
+        dispatch(signInStarts());
 
-        if(!formData.email || !formData.password ) {
-            setLoading(false);
-            return  setErrMsg("Please fill out all fields.");
+        if(!formData.email || !formData.password ) {    
+            return  dispatch(signInFailure("Please fill out all fields."));
         }
         try{
-            setErrMsg(null);
-
             const response = await fetch(
             "/api/auth/signin", 
             {
@@ -36,19 +35,17 @@ export default function Signin() {
                 body : JSON.stringify( { user : formData} )
             },
         );
-        if(response.ok) {
-            navigate("/home");
-        }
         const data = await response.json();
         if(data.success === false) {
-            setLoading(false);
-            return setErrMsg(data.message);
+            return dispatch(signInFailure(data.message));
         }
-        setLoading(false);
-
+        
+        if(response.ok) {
+            dispatch(signInSuccess(data));
+            navigate("/");
+        }
         } catch(err){
-            setErrMsg(err.message);
-            setLoading(false);
+            dispatch(signInFailure(err.message));     
         }
     }
     return(
