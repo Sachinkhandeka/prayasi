@@ -1,14 +1,18 @@
 import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
-import { FaMoon } from "react-icons/fa";
-import { HiCog, HiCurrencyDollar, HiLogout, HiViewGrid } from 'react-icons/hi';
+import { FaMoon , FaSun } from "react-icons/fa";
+import { HiCog, HiLogout, HiViewGrid } from 'react-icons/hi';
 import Brand from "./Brand";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleTheme } from "../redux/theme/themeSlice";
+
 
 export default function Header() {
     const location = useLocation();
     const { currentUser } = useSelector( state => state.user );
+    const { theme } = useSelector((state)=> state.theme);
+    const dispatch = useDispatch();
 
     console.log(currentUser);
     return(
@@ -22,8 +26,8 @@ export default function Header() {
                 <AiOutlineSearch />
             </Button>
             <div className="flex items-center gap-4 md:order-2 " >
-                <Button className="w-12 h-10 hidden md:block" color="gray" pill > 
-                    <FaMoon />
+                <Button className="w-12 h-10 hidden md:block" color="gray" pill onClick={()=> dispatch(toggleTheme())} > 
+                    { theme === "dark" ? <FaSun /> : <FaMoon /> }
                 </Button>
                 { currentUser ? (
                     <Dropdown arrowIcon={false} inline  label={<Avatar alt="user" img={currentUser.profilePicture}rounded/>}>

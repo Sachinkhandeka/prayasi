@@ -54,7 +54,7 @@ export  default function Signup() {
     }
     return(
         <>
-        <div className="min-h-screen mt-4 flex flex-col lg:flex-row justify-around items-center px-4 lg:px-10">
+        <div className="min-h-screen pt-4 flex flex-col lg:flex-row justify-around items-center px-4 lg:px-10">
             <div className="px-4 py-2 max-w-xl " >
                 <h1 className="text-4xl md:text-[4rem] font-bold underline whitespace-nowrap mb-[2rem]" >Welcome to</h1>
                 <Brand className={"font-bold dark:text-white text-xl md:text-4xl"} />
@@ -88,7 +88,7 @@ export  default function Signup() {
                         <Label value="Your password" />
                         <TextInput 
                             type="password"
-                            placeholder="passowrd"
+                            placeholder="*****************"
                             id="password"
                             onChange={handleChange}
                         />

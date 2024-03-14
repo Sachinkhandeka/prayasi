@@ -51,10 +51,10 @@ export default function Signin() {
     }
     return(
         <>
-        <div className="min-h-screen mt-4 flex flex-col lg:flex-row justify-around items-center px-4 lg:px-10" >
+        <div className="min-h-screen pt-4 flex flex-col lg:flex-row justify-around items-center px-4 lg:px-10" >
             <div className="px-4 py-2 max-w-xl">
                 <h1 className="text-4xl md:text-[4rem] font-bold underline whitespace-nowrap mb-[2rem]">Welcome to</h1>
-                <Brand className={"font-bold dark:text-white text-xl md:text-4xl"} />
+                <Brand className={"font-bold  text-xl md:text-4xl"} />
                 <p className=" mt-4 md:mt-[2.5rem] text-gray-500 leading-8 text-lg" >Where your words find a home and your stories come to life. Start your journey of expression and connection today!</p>
             </div>
             <div className="border border-gray-200 px-6 py-4 rounded-lg shadow-lg w-full mx-10 max-w-xl" >
