@@ -35,19 +35,19 @@ export default function Header() {
                             <span className="block truncate text-sm font-medium " >@{ currentUser.username }</span>
                         </Dropdown.Header>
                         <Link to="/dashboard?tob=profile" >
-                            <Dropdown.Item icon={HiViewGrid} >Dashboard</Dropdown.Item>
+                            <Dropdown.Item icon={HiViewGrid} as={"div"} >Dashboard</Dropdown.Item>
                         </Link>
                         <Link to="/settings">
-                            <Dropdown.Item icon={HiCog}>Settings</Dropdown.Item>
+                            <Dropdown.Item icon={HiCog} as={"div"} >Settings</Dropdown.Item>
                         </Link>
                         <Dropdown.Divider />
-                        <Link to="signout">
-                            <Dropdown.Item icon={HiLogout}>Sign out</Dropdown.Item>
+                        <Link to="/signout" >
+                            <Dropdown.Item icon={HiLogout} as={"div"} >Sign out</Dropdown.Item>
                         </Link>       
                     </Dropdown>
                 ) : (
                     <Link to="/signin" >
-                        <Button gradientDuoTone={"purpleToBlue"} outline>Sign in</Button>
+                        <Button gradientDuoTone={"purpleToBlue"} outline as={"div"} >Sign in</Button>
                     </Link>
                 ) }
                 <Navbar.Toggle />
