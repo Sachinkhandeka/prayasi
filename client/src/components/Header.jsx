@@ -32,7 +32,7 @@ export default function Header() {
                 { currentUser ? (
                     <Dropdown arrowIcon={false} inline  label={<Avatar alt="user" img={currentUser.profilePicture}rounded/>}>
                         <Dropdown.Header>
-                            <span className="block text-sm ml-8 my-4" ><Brand /></span>
+                            <span className="block text-sm my-4" ><Brand /></span>
                             <span className="block truncate text-sm font-medium " >@{ currentUser.username }</span>
                         </Dropdown.Header>
                         <Link to="/dashboard?tob=profile" >

@@ -13,6 +13,7 @@ const Projects = React.lazy(()=> import("./pages/Projects"));
 //components import 
 import Header from "./components/Header";
 import FooterComponent from "./components/Footer";
+import PrivateRoute from "./components/PrivateRoute";
 
 export default function App() {
   return (
@@ -24,7 +25,9 @@ export default function App() {
         <Route path="/about" element={ <Suspense fallback={<div>Loading ...</div>}> <About /> </Suspense> }/>
         <Route path="/signup" element={ <Suspense fallback={<div>Loading ...</div>} ><Signup /></Suspense> }/>
         <Route path="/signin" element={ <Suspense fallback={<div>Loading ...</div>} ><Signin /></Suspense> }/>
-        <Route path="/dashboard" element={ <Suspense fallback={<div>Loading ...</div>} ><Dashboard /></Suspense> }/>
+        <Route element={ <PrivateRoute /> }>
+          <Route path="/dashboard" element={ <Suspense fallback={<div>Loading ...</div>} ><Dashboard /></Suspense> }/>
+        </Route>
         <Route path="/projects" element={ <Suspense fallback={<div>Loading ...</div>}><Projects /></Suspense> }/>
       </Routes>
       <FooterComponent />
