@@ -10,6 +10,10 @@ router.post(
 router.post(
     "/signin",
     wrapAsync(authController.signinController)
+);
+router.post(
+    "/google",
+    wrapAsync(authController.googleController)
 )
 
 module.exports = router ; 

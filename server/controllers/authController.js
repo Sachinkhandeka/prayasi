@@ -67,3 +67,36 @@ module.exports.signinController = async(req ,res)=> {
     }).json(rest);
 
 }
+
+module.exports.googleController = async(req ,res)=> {
+    const { name ,email , googlePhotoUrl } = req.body ; 
+
+    const user = await User.findOne({ email : email });
+    if(user) {
+        const token = jwt.sign({ id : user._id }, secret);
+
+        const { password , ...rest } = user._doc ; 
+
+        res.status(200).cookie("access_token", token , {
+            httpOnly : true,
+        }).json(rest);
+    } else {
+        const generatePassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+        const hashedPass = bcryptjs.hashSync(generatePassword , 10);
+
+        const newUser = new User({
+            username : name.toLowerCase().split(' ').join('') + Math.random().toString(9).slice(-4),
+            email : email ,
+            password : hashedPass,
+            profilePicture : googlePhotoUrl, 
+        });
+
+        await newUser.save();
+        const token = jwt.sign({ id: newUser._id }, secret);
+        const { password , ...rest } = newUser._doc ; 
+
+        res.status(200).cookie("access_token" , token , {
+            httpOnly : true,
+        }).json(rest);
+    }
+}
