@@ -63,7 +63,8 @@ module.exports.signinController = async(req ,res)=> {
     const { password : pass ,  ...rest } = validUser._doc ; 
 
     res.status(200).cookie("access_token" , token , {
-        httpOnly : true
+        httpOnly : true,
+        // secure: true, // Ensures the cookie is only sent over HTTPS - at production time set it
     }).json(rest);
 
 }

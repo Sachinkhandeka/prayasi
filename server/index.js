@@ -8,10 +8,10 @@ const mongoose = require("mongoose");
 const DB_URL = process.env.MONGO_DB_URL ; 
 const cors = require("cors");
 const path = require("path");
-
 const userRoutes  = require("./routes/userRoute");
 const authRoutes = require("./routes/authRoute");
 const ExpressError = require("./utils/ExpressError");
+const cookieParser = require("cookie-parser");
 
 main().then(()=> {
     console.log("Server Connected with DB successfully!");
@@ -28,6 +28,7 @@ app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended : true }));
 app.use(express.static(path.join(__dirname , "public")));
+app.use(cookieParser());
 
 
 //testing route 

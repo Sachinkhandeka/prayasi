@@ -1,12 +1,21 @@
 const express = require("express");
 const router = express.Router({ mergeParams : true });
-const userController = require("../controllers/userController");
-
+const user = require("../controllers/userController");
+const wrapAsync = require("../utils/wrapAsync");
+const { verifyToken } = require("../utils/verifyUser");
+const { validateUpdatedUser } = require("../middlewares");
 
 //teting route
 router.get(
     "/",
-    userController.testController
-)
+    user.testController
+);
+//update route
+router.put(
+    "/update/:userId",
+    validateUpdatedUser,
+    verifyToken,
+    wrapAsync(user.updateUserController)
+);
 
 module.exports = router ; 

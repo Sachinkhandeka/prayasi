@@ -1,19 +1,22 @@
 const express = require("express");
 const router = express.Router({mergeParams : true});
-const authController = require("../controllers/authController");
+const auth = require("../controllers/authController");
 const wrapAsync = require("../utils/wrapAsync");
+const { validateSignupUser, validateSigninUser } = require("../middlewares");
 
 router.post(
     "/signup",
-    wrapAsync(authController.signupController)
+    validateSignupUser,
+    wrapAsync(auth.signupController)
 );
 router.post(
     "/signin",
-    wrapAsync(authController.signinController)
+    validateSigninUser,
+    wrapAsync(auth.signinController)
 );
 router.post(
     "/google",
-    wrapAsync(authController.googleController)
-)
+    wrapAsync(auth.googleController)
+);
 
 module.exports = router ; 
