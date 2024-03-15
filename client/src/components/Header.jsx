@@ -34,7 +34,7 @@ export default function Header() {
                             <span className="block text-sm my-4" ><Brand /></span>
                             <span className="block truncate text-sm font-medium " >@{ currentUser.username }</span>
                         </Dropdown.Header>
-                        <Link to="/dashboard?tob=profile" >
+                        <Link to="/dashboard?tab=profile" >
                             <Dropdown.Item icon={HiViewGrid} as={"div"} >Dashboard</Dropdown.Item>
                         </Link>
                         <Link to="/settings">

@@ -96,7 +96,7 @@ export default function DashProfile() {
         }
     }
     return(
-        <div className="max-w-lg mx-auto w-full md:border md:border-gray-200 md:shadow-lg md:rounded-lg md:p-4 my-10">
+        <div className="max-w-lg mx-auto w-full md:border md:border-gray-200 md:shadow-lg md:rounded-lg p-4 my-10">
             { uploadError &&  <Alert color="failure">{ uploadError }</Alert> }
             <h1 className="text-3xl text-center font-bold my-7" >Profile</h1>
             <form className="flex flex-col gap-5" onSubmit={handleSubmit} >
