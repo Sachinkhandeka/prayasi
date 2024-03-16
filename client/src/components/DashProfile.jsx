@@ -12,13 +12,18 @@ export default function DashProfile() {
     const { currentUser } = useSelector(state => state.user);
     const [ imageFile , setImageFile ] = useState(null);
     const [ imageFileUrl , setImageFileUrl ] = useState(null);
+    const [ isImageUploading , setIsImageUploading ] = useState(false);
     const [ uploadingProgressBar , setUploadingProgressBar ] = useState(null);
     const [ uploadError , setUploadError ] = useState(null);
+    const [ updateUserSuccess , setUpdateUserSuccess ] = useState(null);
+    const [ updateUserError , setUpdateUserError ] = useState(null);
     const filePickerRef = useRef();
     const [ formData , setFormData ] = useState({});
     const dispatch = useDispatch();
 
+    
     const uploadImg = async()=> {
+        setIsImageUploading(true);
         setUploadError(null);
         const storage = getStorage(app);
         const fileName = new Date().getTime() + imageFile.name ;
@@ -32,15 +37,17 @@ export default function DashProfile() {
                 setUploadingProgressBar(progress.toFixed(0));
             }, 
             (err)=> {
-                setUploadError("Could not upload image(File must be less than 2Mb");
+                setUploadError("Could not upload image(File must be less than 2Mb)");
                 setUploadingProgressBar(null);
                 setImageFileUrl(null);
                 setImageFile(null);
+                setIsImageUploading(false);
             },
             ()=> {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL)=> {
                     setImageFileUrl(downloadURL);
                     setFormData({...formData, profilePicture :downloadURL});
+                    setIsImageUploading(false);
                 });
             }
         )
@@ -69,9 +76,18 @@ export default function DashProfile() {
 
     const handleSubmit = async(e)=> {
         e.preventDefault();
+        setUpdateUserSuccess(null);
+        setUploadError(null);
+
         if(Object.keys(formData).length === 0) {
+            setUpdateUserError("No changes detected for update user");
             return ;
         }
+        if(isImageUploading) {
+            setUpdateUserError("Please wait while image is uploading");
+            return ; 
+        }
+
         try {
             dispatch(updateStart);
             const response = await fetch( 
@@ -89,6 +105,7 @@ export default function DashProfile() {
                 dispatch(updateFailure(data.message));
             } else {
                 dispatch(updateSuccess(data));
+                setUpdateUserSuccess("User's profile updated successfully");
             }
 
         } catch(err){
@@ -97,13 +114,20 @@ export default function DashProfile() {
     }
     return(
         <div className="max-w-lg mx-auto w-full md:border md:border-gray-200 md:shadow-lg md:rounded-lg p-4 my-10">
-            { uploadError &&  <Alert color="failure">{ uploadError }</Alert> }
+            { uploadError &&  <Alert color="failure" onDismiss={()=> setUploadError(null)}>{ uploadError }</Alert> }
+            { updateUserSuccess && <Alert color={"success"} onDismiss={() => setUpdateUserSuccess(null) } >{ updateUserSuccess }</Alert> }
+            { updateUserError && <Alert color={"failure"} onDismiss={()=> setUpdateUserError(null)} >{ updateUserError }</Alert> }
             <h1 className="text-3xl text-center font-bold my-7" >Profile</h1>
             <form className="flex flex-col gap-5" onSubmit={handleSubmit} >
                 <input type="file" id="profilePicture" accept="image/*" onChange={handleChange}  ref={filePickerRef} hidden/>
                 <div className="relative w-32 h-32 self-center cursor-pointer shadow-lg rounded-full" onClick={()=> filePickerRef.current.click()} >
                     { uploadingProgressBar && (
-                        <CircularProgressbar value={uploadingProgressBar || 0} text={`${ uploadingProgressBar }%`} strokeWidth={5} styles={{ root : { width : '100%', height: '100%', position: 'absolute', top: 0, left : 0 }, path : { stroke : `rgba(62, 152, 199, ${uploadingProgressBar / 100})` }, }} />
+                        <CircularProgressbar 
+                           value={uploadingProgressBar || 0} 
+                           text={`${ uploadingProgressBar }%`} 
+                           strokeWidth={5} 
+                           styles={{ root : { width : '100%', height: '100%', position: 'absolute', top: 0, left : 0 }, path : { stroke : `rgba(62, 152, 199, ${uploadingProgressBar / 100})` }, }} 
+                        />
                     ) }
                     <img 
                        src={ imageFileUrl || currentUser.profilePicture } 

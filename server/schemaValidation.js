@@ -11,13 +11,13 @@ const signupSchema = Joi.object({
 
 const signinSchema = Joi.object({
     user : Joi.object({
-        email : Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'org', 'edu', 'gov', 'io', 'co', 'uk', 'de', 'jp'] } }),
-        password : Joi.string().min(4).max(15),
+        email : Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'org', 'edu', 'gov', 'io', 'co', 'uk', 'de', 'jp'] } }).required(),
+        password : Joi.string().min(4).max(15).required(),
     }).required()
 });
 
 const updateSchema = Joi.object({
-    username : Joi.string().min(5).max(30).required(),
+    username : Joi.string().min(5).max(30),
     email : Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'org', 'edu', 'gov', 'io', 'co', 'uk', 'de', 'jp'] } }),
     password : Joi.string().min(4).max(15),
     profilePicture : Joi.string(),
