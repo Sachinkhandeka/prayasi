@@ -6,9 +6,8 @@ import { getDownloadURL, getStorage, uploadBytesResumable, ref } from "firebase/
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { updateStart,updateSuccess,updateFailure,deleteStart,deleteSuccess,deleteFailure } from "../redux/user/userSlice";
+import { updateStart,updateSuccess,updateFailure,deleteStart,deleteSuccess,deleteFailure,signoutSuccess } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 export default function DashProfile() {
     const { currentUser , error } = useSelector(state => state.user);
@@ -23,8 +22,6 @@ export default function DashProfile() {
     const filePickerRef = useRef();
     const [ formData , setFormData ] = useState({});
     const dispatch = useDispatch();
-    const navigate = useNavigate();
-
     
     const uploadImg = async()=> {
         setIsImageUploading(true);
@@ -93,7 +90,7 @@ export default function DashProfile() {
         }
 
         try {
-            dispatch(updateStart);
+            dispatch(updateStart());
             const response = await fetch( 
                 `/api/user/update/${currentUser._id}`,
                 {
@@ -121,7 +118,7 @@ export default function DashProfile() {
     const handleDeleteFunx = async()=> {
         setShowModel(false);
         try{
-            dispatch(deleteStart);
+            dispatch(deleteStart());
 
             const response = await fetch(
                 `/api/user/delete/${currentUser._id}`,
@@ -136,10 +133,29 @@ export default function DashProfile() {
                 dispatch(deleteFailure(data.message));
             } else {
                 dispatch(deleteSuccess(data));
-                navigate("/");
             }
         }catch(err){
             dispatch(deleteFailure(err.message));
+        }
+    }
+
+    //handle signout 
+    const handleSignout = async()=> {
+        try {
+            const response = await fetch(
+                "api/user/signout",
+                {
+                    method : "POST",
+                }
+            );
+            const data = await response.json();
+            if(!response.ok) {
+                console.log(data.message);
+            }else {
+                dispatch(signoutSuccess());
+            }
+        } catch(err) {
+            console.log(err);
         }
     }
     return(
@@ -173,7 +189,7 @@ export default function DashProfile() {
             </form>
             <div className="text-red-500 flex justify-between items-center my-10 px-4">
                 <span className="cursor-pointer hover:underline" onClick={()=> setShowModel(true)} >Delete Account</span>
-                <span className="cursor-pointer hover:underline" >Sign Out</span>
+                <span className="cursor-pointer hover:underline" onClick={handleSignout} >Sign Out</span>
             </div>
             <Modal show={showModel} onClose={()=> setShowModel(false)} popup size={"md"}>
                 <Modal.Header />

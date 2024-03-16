@@ -1,19 +1,40 @@
 import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation , useNavigate } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon , FaSun } from "react-icons/fa";
 import { HiCog, HiLogout, HiViewGrid } from 'react-icons/hi';
 import Brand from "./Brand";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../redux/theme/themeSlice";
-
+import { signoutSuccess } from "../redux/user/userSlice";
 
 export default function Header() {
     const location = useLocation();
     const { currentUser } = useSelector( state => state.user );
     const { theme } = useSelector((state)=> state.theme);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
+     //handle signout 
+     const handleSignout = async()=> {
+        try {
+            const response = await fetch(
+                "api/user/signout",
+                {
+                    method : "POST",
+                }
+            );
+            const data = await response.json();
+            if(!response.ok) {
+                console.log(data.message);
+            }else {
+                dispatch(signoutSuccess());
+                navigate("/");
+            }
+        } catch(err) {
+            console.log(err);
+        }
+    }
     return(
         <>
         <Navbar className="border border-b-2" >
@@ -38,11 +59,11 @@ export default function Header() {
                             <Dropdown.Item icon={HiViewGrid} as={"div"} >Dashboard</Dropdown.Item>
                         </Link>
                         <Link to="/settings">
-                            <Dropdown.Item icon={HiCog} as={"div"} >Settings</Dropdown.Item>
+                            <Dropdown.Item icon={HiCog} as={"div"}>Settings</Dropdown.Item>
                         </Link>
                         <Dropdown.Divider />
                         <Link to="/signout" >
-                            <Dropdown.Item icon={HiLogout} as={"div"} >Sign out</Dropdown.Item>
+                            <Dropdown.Item icon={HiLogout} as={"div"} onClick={handleSignout} >Sign out</Dropdown.Item>
                         </Link>       
                     </Dropdown>
                 ) : (
