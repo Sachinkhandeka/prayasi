@@ -17,5 +17,11 @@ router.put(
     verifyToken,
     wrapAsync(user.updateUserController)
 );
+//delete route
+router.delete(
+    "/delete/:userId",
+    verifyToken,
+    wrapAsync(user.deleteUserController)
+)
 
 module.exports = router ; 

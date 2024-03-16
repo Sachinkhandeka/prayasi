@@ -44,3 +44,21 @@ module.exports.updateUserController  = async(req ,res)=> {
     const {  password  : pass , ...rest } = updatedUser._doc;
     res.status(200).json(rest);
 }
+
+//delete  route controller 
+module.exports.deleteUserController = async(req, res)=> {
+    const id =  req.user.id ; 
+    const userId = req.params.userId ; 
+
+    if(!userId) {
+        throw new ExpressError(400 , "Invalid userId");
+    }
+
+    if(id !== userId) {
+        throw new ExpressError(400 , "You are not allowed to delete this User");
+    }
+
+    await User.findByIdAndDelete(userId);
+
+    res.status(200).json("User Deleted Successfully");
+}
