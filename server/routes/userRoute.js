@@ -22,6 +22,10 @@ router.delete(
     "/delete/:userId",
     verifyToken,
     wrapAsync(user.deleteUserController)
+);
+//signout route
+router.post(
+    "/signout",
+    user.signoutUserController
 )
-
 module.exports = router ; 

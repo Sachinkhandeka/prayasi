@@ -62,3 +62,12 @@ module.exports.deleteUserController = async(req, res)=> {
 
     res.status(200).json("User Deleted Successfully");
 }
+
+//signout route controller
+module.exports.signoutUserController = (req ,res)=> {
+    try {
+        res.clearCookie("access_token").status(200).json("User signed out successfully");
+    }catch(err) {
+        throw new ExpressError(400 ,err.message);
+    }
+}

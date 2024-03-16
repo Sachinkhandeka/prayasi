@@ -12,11 +12,9 @@ module.exports.signupController = async(req ,res)=> {
     }
 
     const isRegistered = await User.findOne({
-        $or : [
-            { username : { $regex : new RegExp(`${user.username}`) } },
-            { email : { $regex : new RegExp(`${user.email}`) } },
-        ]
+        $or : [{ username : user.username },{ email : user.email }]
     }) ; 
+    
     if(isRegistered) {
         let errMsg = '';
         if(isRegistered.username === user.username) {
@@ -34,11 +32,15 @@ module.exports.signupController = async(req ,res)=> {
         password : hashPassword , 
     }
     
-    const newUser = new User(user);
+    let newUser = new User(user);
 
-    await newUser.save();
+    newUser = await newUser.save();
+    const token = jwt.sign({id : newUser._id}, secret);
 
-    res.send("Welcome to Prayasi!!");
+    const { password : pass, ...rest } = newUser._doc ; 
+    res.status(200).cookie("access_token" , token , {
+        httpOnly : true,
+    }).json(rest);
 }
 
 module.exports.signinController = async(req ,res)=> {
