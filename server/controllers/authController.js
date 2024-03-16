@@ -35,7 +35,7 @@ module.exports.signupController = async(req ,res)=> {
     let newUser = new User(user);
 
     newUser = await newUser.save();
-    const token = jwt.sign({id : newUser._id}, secret);
+    const token = jwt.sign({id : newUser._id , isAdmin : newUser.isAdmin}, secret);
 
     const { password : pass, ...rest } = newUser._doc ; 
     res.status(200).cookie("access_token" , token , {
@@ -61,7 +61,7 @@ module.exports.signinController = async(req ,res)=> {
         throw new ExpressError(400 , "Invalid password");
     }
 
-    const token = jwt.sign({id : validUser._id}, secret);
+    const token = jwt.sign({id : validUser._id, isAdmin : validUser.isAdmin }, secret);
     const { password : pass ,  ...rest } = validUser._doc ; 
 
     res.status(200).cookie("access_token" , token , {
@@ -76,7 +76,7 @@ module.exports.googleController = async(req ,res)=> {
 
     const user = await User.findOne({ email : email });
     if(user) {
-        const token = jwt.sign({ id : user._id }, secret);
+        const token = jwt.sign({ id : user._id, isAdmin : user.isAdmin }, secret);
 
         const { password , ...rest } = user._doc ; 
 
