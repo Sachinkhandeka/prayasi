@@ -4,8 +4,8 @@ const BlogPost = require("../models/blog");
 module.exports.createBlogController = async(req , res)=> {
     const isAdmin = req.user.isAdmin; 
     const userId = req.user.id;
-    const blog = req.body.blog; 
-
+    const blog = req.body; 
+   
     if(!userId || userId === '') {
         throw new ExpressError(400 , "You are not allowed to create post.(userId not found");
     }
