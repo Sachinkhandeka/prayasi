@@ -10,6 +10,7 @@ const cors = require("cors");
 const path = require("path");
 const userRoutes  = require("./routes/userRoute");
 const authRoutes = require("./routes/authRoute");
+const blogRoute = require("./routes/blogRoute");
 const ExpressError = require("./utils/ExpressError");
 const cookieParser = require("cookie-parser");
 
@@ -27,13 +28,13 @@ async function main() {
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended : true }));
-app.use(express.static(path.join(__dirname , "public")));
 app.use(cookieParser());
 
 
-//testing route 
-app.use("/api/user" , userRoutes);
+//routes 
+app.use("/api/user", userRoutes );
 app.use("/api/auth", authRoutes );
+app.use("/api/post", blogRoute );
 
 app.all("*" , (req ,res , next)=> {
     next(new ExpressError(404 , "Page Not Found"));
