@@ -6,12 +6,19 @@ import { getStorage , getDownloadURL, ref , uploadBytesResumable } from "firebas
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 
 export default function CreatePost() {
+    const { currentUser } = useSelector(state => state.user);
     const [ file ,setFile ] = useState(null);
     const [ imageUploadProgress , setImageUploadProgress ] = useState(null);
     const [ imageUploadError , setImageUploadError ] = useState(null);
     const [ formData , setFormData ] = useState({});
+    const [ submitError , setSubmitError ] = useState(null);
+    const [ submitSuccess , setSubmitSuccess ] = useState(null);
+    const navigate = useNavigate();
 
     //file upload functionality
     const handleUploadImg = async()=> {
@@ -51,14 +58,56 @@ export default function CreatePost() {
             setImageUploadProgress(null);
         }
     }
+
+    //handle form submit 
+    const handleSubmit = async(e)=> {
+        e.preventDefault();
+        try{
+            setSubmitError(null);
+            setSubmitSuccess(null);
+            if(!currentUser) {
+                setSubmitError("Can't create post without user");
+                return ;
+            }
+
+            if(!currentUser.isAdmin) {
+                setSubmitError("You are not allowed to create blog post");
+                return ;
+            }
+            setFormData({ ...formData , author : currentUser._id });
+            const blog = formData ; 
+            if(!blog) {
+                setSubmitError("Please provide all required field data.");
+                return ; 
+            }
+            const response = await fetch(
+                "/api/post/create",
+                {
+                    method : "POST",
+                    headers : { "Content-Type" : "application/json" },
+                    body : JSON.stringify(blog)
+                }
+            );
+            const data = await response.json();
+            if(!response.ok) {
+                setSubmitError(data.message);
+                return ;
+            }
+            setSubmitSuccess("Blog Post Published Successfully");
+            navigate(`/post/${data.savedBlogPost.slug}`);
+        } catch(err) {
+            setSubmitError(err.message);
+            return ;
+        }
+    }
     return (
         <div className="p-3 max-w-3xl mx-auto min-h-screen" >
             <p className="text-center leading-5 mt-7 font-mono text-gray-500 dark:text-teal-500">"Writing is the painting of the voice."</p>
             <h1 className="text-center text-3xl my-7 font-semibold underline" >Create a Post</h1>
-            <form className="flex flex-col gap-4">
+            <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                 <div className="flex flex-col gap-4 sm:flex-row justify-between">
-                    <TextInput type="text" placeholder="Title" required id="title" className="flex-1"/>
-                    <Select>
+                    <TextInput type="text" placeholder="Title" id="title" className="flex-1" onChange={(e)=> setFormData({...formData , title : e.target.value})} required />
+                    <Select onChange={(e)=> setFormData({...formData , category : e.target.value})} >
                         <option value="uncategorized">Select a category</option>
                         <option value="technology">Technology</option>
                         <option value="travel">Travel</option>
@@ -98,8 +147,18 @@ export default function CreatePost() {
                         }
                     </Button>
                 </div>
-                <ReactQuill theme="snow" placeholder="Write something here" className="h-72 mb-12" required/>
+                <ReactQuill theme="snow" placeholder="Write something here" className="h-72 mb-12" required onChange={(value)=> setFormData({ ...formData , content : value })}/>
                 <Button type="submit" gradientDuoTone={"pinkToOrange"} outline >Publish</Button>
+                {
+                    submitError && (
+                    <Alert color={"failure"} onDismiss={()=> setSubmitError(null)} >{ submitError }</Alert>
+                    )
+                }
+                {
+                    submitSuccess && (
+                    <Alert color={"success"} onDismiss={()=> setSubmitSuccess(null)} >{ submitSuccess }</Alert>
+                    )
+                }
             </form>    
         </div>
     )
