@@ -1,5 +1,5 @@
 import { Alert, Button, Modal, TextInput } from "flowbite-react";
-import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import { HiArrowNarrowRight, HiOutlineExclamationCircle } from 'react-icons/hi';
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { getDownloadURL, getStorage, uploadBytesResumable, ref } from "firebase/storage";
@@ -8,9 +8,10 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { updateStart,updateSuccess,updateFailure,deleteStart,deleteSuccess,deleteFailure,signoutSuccess } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 export default function DashProfile() {
-    const { currentUser , error } = useSelector(state => state.user);
+    const { currentUser , error , loading } = useSelector(state => state.user);
     const [ imageFile , setImageFile ] = useState(null);
     const [ imageFileUrl , setImageFileUrl ] = useState(null);
     const [ isImageUploading , setIsImageUploading ] = useState(false);
@@ -185,7 +186,20 @@ export default function DashProfile() {
                 <TextInput type="text" placeholder={ currentUser.username } id="username" defaultValue={currentUser.username} onChange={handleFormData} />
                 <TextInput type="text" placeholder={ currentUser.email } id="email" defaultValue={currentUser.email} onChange={handleFormData} />
                 <TextInput type="password" placeholder="********" id="password" onChange={handleFormData} />
-                <Button type="submit" gradientDuoTone="purpleToBlue" outline className="uppercase font-semibold" >Update</Button>
+                <Button 
+                    type="submit" 
+                    gradientDuoTone="purpleToBlue" 
+                    outline 
+                    className="font-semibold" 
+                    disabled={ loading || isImageUploading}
+                >
+                    { loading || isImageUploading ? 'Loading...': "Update" }
+                </Button>
+                { currentUser.isAdmin && (
+                    <Link to="/create-post">
+                        <Button type="button" gradientDuoTone="greenToBlue" outline className="w-full">Create Post <HiArrowNarrowRight className="ml-2 h-5 w-5"/></Button>
+                    </Link>
+                )}
             </form>
             <div className="text-red-500 flex justify-between items-center my-10 px-4">
                 <span className="cursor-pointer hover:underline" onClick={()=> setShowModel(true)} >Delete Account</span>
