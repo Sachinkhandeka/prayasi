@@ -10,5 +10,10 @@ router.post(
     verifyToken,
     wrapAsync(blog.createBlogController)
 );
+//get all post route
+router.get(
+    "/getposts",
+    wrapAsync(blog.getAllBlogPostController),
+);
 
 module.exports = router ; 
