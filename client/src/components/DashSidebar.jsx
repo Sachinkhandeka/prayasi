@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Sidebar } from "flowbite-react";
-import { HiArrowSmRight, HiChartPie, HiInbox, HiUser } from 'react-icons/hi';
+import { HiArrowSmRight, HiChartPie, HiInbox, HiOutlineUserGroup, HiUser } from 'react-icons/hi';
 import { signoutSuccess } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -46,12 +46,20 @@ export default function DashSidebar() {
         <Sidebar.Items>
            <Sidebar.ItemGroup className="flex flex-col gap-2">
                 <Link to="/dashboard?tab=profile">
-                    <Sidebar.Item href="#" active={tab === "profile"} icon={HiUser} label={currentUser.isAdmin ? "Admin": "User"} labelColor={"dark"} as={"div"}>Profile</Sidebar.Item>
+                    <Sidebar.Item active={tab === "profile"} icon={HiUser} label={currentUser.isAdmin ? "Admin": "User"} labelColor={"dark"} as={"div"}>Profile</Sidebar.Item>
                 </Link>
                 {
-                    currentUser && (
+                    currentUser.isAdmin && (
                         <Link to="/dashboard?tab=posts">
-                            <Sidebar.Item href="#" active={tab === "posts"}  icon={HiChartPie} as={"div"} >Blogs</Sidebar.Item>
+                            <Sidebar.Item active={tab === "posts"}  icon={HiChartPie} as={"div"} >Blogs</Sidebar.Item>
+                        </Link>
+                         
+                    )
+                }
+                {
+                    currentUser.isAdmin && (
+                        <Link to="/dashboard?tab=users">
+                            <Sidebar.Item active={tab === "users"} icon={HiOutlineUserGroup} as={"div"} >Users</Sidebar.Item>
                         </Link>
                     )
                 }

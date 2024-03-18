@@ -92,7 +92,7 @@ export default function DahsPost() {
           className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500" >
             { error && ( <Alert color={"failure"} onDismiss={()=> setError(null)} className="mx-auto mb-4" >{ error }</Alert> ) }
             { success && ( <Alert color={"success"} onDismiss={()=> setSuccess(null)} className="mx-auto mb-4" >{ success }</Alert> ) }
-            { currentUser.isAdmin && userPosts.length > 0 ? (
+            { currentUser.isAdmin && userPosts && userPosts.length > 0 ? (
                 <>
                 <Table hoverable className="shadow-md" >
                     <Table.Head>
@@ -100,12 +100,8 @@ export default function DahsPost() {
                         <Table.HeadCell>Post Image</Table.HeadCell>
                         <Table.HeadCell>Post Title</Table.HeadCell>
                         <Table.HeadCell>Category</Table.HeadCell>
-                        <Table.HeadCell>
-                            <span>Delete</span>
-                        </Table.HeadCell>
-                        <Table.HeadCell>
-                            <span>Edit</span>
-                        </Table.HeadCell>
+                        <Table.HeadCell>Delete</Table.HeadCell>
+                        <Table.HeadCell>Edit</Table.HeadCell>
                     </Table.Head>
                     { userPosts.map((post)=> (
                         <Table.Body className="divide-y" key={post.slug} >
