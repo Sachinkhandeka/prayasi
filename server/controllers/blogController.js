@@ -64,6 +64,18 @@ module.exports.getAllBlogPostController = async(req ,res)=> {
         totalPost,
         lastMonthPost,
     });
+}
+//delete blogpost - delete handler
+module.exports.deleteBlogPostController = async(req ,res)=> {
+    const  postId  = req.params.postId ; 
+    const  userId = req.params.userId ;
+    const isAdmin = req.user.isAdmin;
+    
+    if(!isAdmin || req.user.id !== userId) {
+        throw new ExpressError(403 , "You are not allowed to delete this post");
+    }
 
+    await BlogPost.findByIdAndDelete(postId);
 
+    res.status(200).json("The post has been deleted");
 }

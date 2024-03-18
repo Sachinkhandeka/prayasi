@@ -15,5 +15,11 @@ router.get(
     "/getposts",
     wrapAsync(blog.getAllBlogPostController),
 );
+//delete blogpost route
+router.delete(
+    "/deletepost/:postId/:userId",
+    verifyToken,
+    wrapAsync(blog.deleteBlogPostController),
+);
 
 module.exports = router ; 
