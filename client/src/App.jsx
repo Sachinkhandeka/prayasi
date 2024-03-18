@@ -9,6 +9,7 @@ const Signin = React.lazy(()=> import("./pages/Signin"));
 const Signup = React.lazy(()=> import("./pages/Signup"));
 const Dashboard = React.lazy(()=> import("./pages/Dashboard"));
 const Projects = React.lazy(()=> import("./pages/Projects"));
+const UpdatePost = React.lazy(()=> import("./pages/UpdatePost"));
 const CreatePost = React.lazy(()=> import("./components/CreatePost"));
 
 //components import 
@@ -16,6 +17,7 @@ import Header from "./components/Header";
 import FooterComponent from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute";
 import OnlyAdminPrivateRoute from "./components/OnlyAdminPrivateRoute";
+
 
 export default function App() {
   return (
@@ -32,8 +34,9 @@ export default function App() {
         </Route>
         <Route element={<OnlyAdminPrivateRoute />} >
           <Route path="/create-post" element={<Suspense fallback={<div>Loading...</div>} ><CreatePost/></Suspense>} />
+          <Route path="/update-post/:postId" element={<Suspense fallback={<div>Loading</div>} ><UpdatePost /></Suspense>} />
         </Route>
-        <Route path="/projects" element={ <Suspense fallback={<div>Loading ...</div>}><Projects /></Suspense> }/>
+        <Route path="/projects/" element={ <Suspense fallback={<div>Loading ...</div>}><Projects /></Suspense> }/>
       </Routes>
       <FooterComponent />
     </BrowserRouter>
