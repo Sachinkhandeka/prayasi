@@ -64,6 +64,7 @@ export default function DahsPost() {
     const handleDeletePost = async()=> {
         setShowModal(false);
         setError(null);
+        setSuccess(null);
         try {
             const  response = await fetch(
                 `/api/post/deletepost/${postIdToDelete}/${currentUser._id}`,
@@ -108,7 +109,7 @@ export default function DahsPost() {
                             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800" >
                                 <Table.Cell>{ new Date(post.updatedAt).toLocaleDateString() }</Table.Cell>
                                 <Table.Cell>
-                                    <Link to={`post/${post.slug}`}>
+                                    <Link to={`/post/${post.slug}`}>
                                         <img src={post.image} alt={post.title} className="w-20 h-10 object-cover bg-gray-500" />
                                     </Link>
                                 </Table.Cell>
