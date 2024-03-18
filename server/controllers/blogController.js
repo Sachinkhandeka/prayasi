@@ -65,10 +65,35 @@ module.exports.getAllBlogPostController = async(req ,res)=> {
         lastMonthPost,
     });
 }
-//delete blogpost - delete handler
+
+//update blogpost - put handler
+module.exports.updateBogPostController = async(req ,res)=> {
+    const isAdmin = req.user.isAdmin;
+    const userId = req.params.userId ;
+    const postId  = req.params.postId ; 
+    const blog = req.body; 
+
+    if(!isAdmin || req.user.id !== userId) {
+        throw new ExpressError(403, "You are not allowed to update this post");
+    }
+
+    const updatedBlogPost = await BlogPost.findByIdAndUpdate(postId, {
+        $set : {
+            title : blog.title,
+            content : blog.content,
+            category : blog.category,
+            image : blog.image,
+        },
+    }, { new : true });
+
+    res.status(200).json(updatedBlogPost);
+
+}
+
+//destroy blogpost - delete handler
 module.exports.deleteBlogPostController = async(req ,res)=> {
-    const  postId  = req.params.postId ; 
-    const  userId = req.params.userId ;
+    const postId  = req.params.postId ; 
+    const userId = req.params.userId ;
     const isAdmin = req.user.isAdmin;
     
     if(!isAdmin || req.user.id !== userId) {

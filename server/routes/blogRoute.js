@@ -15,7 +15,15 @@ router.get(
     "/getposts",
     wrapAsync(blog.getAllBlogPostController),
 );
-//delete blogpost route
+
+//update blogpost route
+router.put(
+    "/updatepost/:postId/:userId",
+    verifyToken,
+    wrapAsync(blog.updateBogPostController),
+);
+
+//destroy blogpost route
 router.delete(
     "/deletepost/:postId/:userId",
     verifyToken,
