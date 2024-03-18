@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+// const BlogPost = require("./blog");
 
-const useSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     username : {
         type : String,
         required : true,
@@ -26,6 +27,23 @@ const useSchema = new mongoose.Schema({
     },
 }, { timestamps : true });
 
-const User = mongoose.model("User" , useSchema);
 
+//mongoose pre-middleware to delete all posts of deleted user
+// userSchema.pre('findOneAndDelete', async function (next) {
+//     try {
+//         const user = await this.findOne();
+
+//         if (user) {
+//             // Delete all blog posts authored by the user
+//             await BlogPost.deleteMany({ author: user._id });
+//         }
+
+//         next();
+//     } catch (err) {
+//         console.error(err);
+//         next(err);
+//     }
+// });
+
+const User = mongoose.model("User" , userSchema);
 module.exports = User ; 

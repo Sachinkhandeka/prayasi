@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Table, Button, Modal } from  "flowbite-react";
+import { Table, Button, Modal, Alert } from  "flowbite-react";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { FaCheck , FaTimes } from "react-icons/fa";
@@ -48,7 +48,7 @@ export default function DahsUsers() {
             const response = await fetch(`/api/user/getusers/?startIndx=${startIndx}`);
             const data = await response.json();
             if(response.ok) {
-                setUsersPosts((prev)=> [ ...prev , ...data.users]);
+                setAllUsers((prev)=> [ ...prev , ...data.users]);
                 if(data.users.length < 9) {
                     setShowMore(false);
                 }
@@ -65,7 +65,7 @@ export default function DahsUsers() {
         setError(null);
         setSuccess(null);
         try{
-            const response = await fetch(`/api/user/deleteuser/${userToDelete}`, { method : "DELETE" });
+            const response = await fetch(`/api/user/delete/${userToDelete}`, { method : "DELETE" });
             const  data = await response.json();
 
             if(!response.ok) {
@@ -146,7 +146,7 @@ export default function DahsUsers() {
                     <div className="text-center">
                         <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
                         <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                            Are you sure you want to delete this post?
+                            Are you sure you want to delete this user?
                         </h3>
                         <div className="flex justify-center gap-4">
                             <Button color="failure" onClick={handleDeleteUser}>{"Yes, I'm sure"}</Button>

@@ -7,6 +7,8 @@ module.exports.testController = (req ,res)=> {
     console.log("this is get route for testing!");
     res.send("testing route for get route");
 }
+
+//update user controller - update route handler
 module.exports.updateUserController  = async(req ,res)=> {
     const id = req.user.id;
     const userId = req.params.userId; 
@@ -45,25 +47,7 @@ module.exports.updateUserController  = async(req ,res)=> {
     res.status(200).json(rest);
 }
 
-//delete  route controller 
-module.exports.deleteUserController = async(req, res)=> {
-    const id =  req.user.id ; 
-    const userId = req.params.userId ; 
-
-    if(!userId) {
-        throw new ExpressError(400 , "Invalid userId");
-    }
-
-    if(id !== userId) {
-        throw new ExpressError(400 , "You are not allowed to delete this User");
-    }
-
-    await User.findByIdAndDelete(userId);
-
-    res.status(200).json("User Deleted Successfully");
-}
-
-//signout route controller
+//signout route controller - post route handler
 module.exports.signoutUserController = (req ,res)=> {
     try {
         res.clearCookie("access_token").status(200).json("User signed out successfully");
@@ -75,6 +59,7 @@ module.exports.signoutUserController = (req ,res)=> {
 // get all users controller - get route handler
 module.exports.getAllUsers = async(req ,res)=> {
     const isAdmin = req.user.isAdmin ; 
+    const currentUser = req.user.id ; 
 
     if(!isAdmin) {
         throw new ExpressError(403 , "Your are not allowed  to get all users data");
@@ -84,7 +69,7 @@ module.exports.getAllUsers = async(req ,res)=> {
     const limit = parseInt(req.query.limit)|| 9 ;
     const sortDirection = req.query.sort === "asc" ? 1 : -1 ; 
 
-    const  users = await User.find().sort({ createdAt : sortDirection }).skip(startIndx).limit(limit);
+    const  users = await User.find({ _id : { $ne : currentUser } }).sort({ createdAt : sortDirection }).skip(startIndx).limit(limit);
 
     const usersWithoutPass = users.map((user)=> {
         const { password  : pass , ...rest } = user._doc ; 
@@ -107,4 +92,23 @@ module.exports.getAllUsers = async(req ,res)=> {
         totlaUsers,
         lastMonthsUsers,
     });
+}
+
+//destroy user route controller - delete route handler
+module.exports.deleteUserController = async(req, res)=> {
+    const isAdmin = req.user.isAdmin ;
+    const id =  req.user.id ; 
+    const userId = req.params.userId ; 
+
+    if(!userId) {
+        throw new ExpressError(400 , "Invalid userId");
+    }
+
+    if(!isAdmin && id !== userId) {
+        throw new ExpressError(400 , "You are not allowed to delete this User");
+    }
+
+    await User.findOneAndDelete({ _id: userId });
+
+    res.status(200).json("User Deleted Successfully");
 }

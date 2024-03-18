@@ -34,4 +34,5 @@ router.get(
     verifyToken,
     wrapAsync(user.getAllUsers)
 );
+
 module.exports = router ; 
