@@ -7,6 +7,7 @@ export default function DahsPost() {
     const { currentUser } = useSelector(state => state.user);
     const [ userPosts , setUsersPosts ] = useState([]);
     const [ error , setError ] = useState(null);
+    const [ showMore , setShowMore ] = useState(true);
 
     //fetch posts/blogs data from server
     const fetchPosts = async()=> {
@@ -20,6 +21,9 @@ export default function DahsPost() {
                 return ; 
             }
             setUsersPosts(data.posts);
+            if(data.length < 9) {
+                setShowMore(false);
+            }
 
         }
         catch(err) {
@@ -32,6 +36,23 @@ export default function DahsPost() {
             fetchPosts();
         }
     },[currentUser._id]);
+
+    const handleShowMore = async()=> {
+        const startIndx = userPosts.length;
+        try {
+            const response = await fetch(`/api/post/getposts/?userId=${currentUser._id}&startIndx=${startIndx}`);
+            const data = await response.json();
+            if(response.ok) {
+                setUsersPosts((prev)=> [ ...prev , ...data.posts]);
+                if(data.posts.length < 9) {
+                    setShowMore(false);
+                }
+            }
+        } catch(err) {
+            setError(err.message);
+            return ; 
+        }
+    }
     return (
         <div 
           className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500" >
@@ -51,7 +72,7 @@ export default function DahsPost() {
                         </Table.HeadCell>
                     </Table.Head>
                     { userPosts.map((post)=> (
-                        <Table.Body className="divide-y" >
+                        <Table.Body className="divide-y" key={post.slug} >
                             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800" >
                                 <Table.Cell>{ new Date(post.updatedAt).toLocaleDateString() }</Table.Cell>
                                 <Table.Cell>
@@ -75,6 +96,9 @@ export default function DahsPost() {
                         </Table.Body>
                     )) } 
                 </Table>
+                { showMore && (
+                    <button className="w-full  text-teal-500 self-center text-sm py-7 hover:underline" onClick={handleShowMore} >Show more</button>
+                ) }
                 </>
             ) : (<p>"You have not create Posts yet"</p>) }
         </div>

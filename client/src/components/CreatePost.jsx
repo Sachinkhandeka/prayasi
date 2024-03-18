@@ -48,7 +48,7 @@ export default function CreatePost() {
                         setImageUploadError(null);
                         setFormData({
                             ...formData,
-                            imageUrl : downloadURL,
+                            image : downloadURL,
                         });
                     });
                 },
@@ -124,8 +124,8 @@ export default function CreatePost() {
                     imageUploadError && ( <Alert color="failure" onDismiss={()=> setImageUploadError(null)}>{ imageUploadError }</Alert> )
                 }
                 {
-                    formData.imageUrl && (
-                        <img src={formData.imageUrl} alt="blog-post-image" className="w-full h-72 object-cover"/>
+                    formData.image && (
+                        <img src={formData.image} alt="blog-post-image" className="w-full h-72 object-cover"/>
                     )
                 }
                 <div className="flex items-center gap-4 justify-between border-4 border-teal-500 border-dotted p-3">
