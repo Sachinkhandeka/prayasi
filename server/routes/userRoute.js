@@ -27,5 +27,11 @@ router.delete(
 router.post(
     "/signout",
     user.signoutUserController
-)
+);
+//get all users
+router.get(
+    "/getusers",
+    verifyToken,
+    wrapAsync(user.getAllUsers)
+);
 module.exports = router ; 

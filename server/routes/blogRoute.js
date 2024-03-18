@@ -3,11 +3,13 @@ const router = express.Router({mergeParams : true});
 const { verifyToken } = require("../utils/verifyUser");
 const blog = require("../controllers/blogController");
 const wrapAsync = require("../utils/wrapAsync");
+const { validateBlogPost, validateUpdateBlogPost } = require("../middlewares");
 
 //post route for blog 
 router.post(
     "/create",
     verifyToken,
+    validateBlogPost,
     wrapAsync(blog.createBlogController)
 );
 //get all post route
@@ -20,6 +22,7 @@ router.get(
 router.put(
     "/updatepost/:postId/:userId",
     verifyToken,
+    validateUpdateBlogPost,
     wrapAsync(blog.updateBogPostController),
 );
 

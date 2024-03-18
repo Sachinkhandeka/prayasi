@@ -71,3 +71,40 @@ module.exports.signoutUserController = (req ,res)=> {
         throw new ExpressError(400 ,err.message);
     }
 }
+
+// get all users controller - get route handler
+module.exports.getAllUsers = async(req ,res)=> {
+    const isAdmin = req.user.isAdmin ; 
+
+    if(!isAdmin) {
+        throw new ExpressError(403 , "Your are not allowed  to get all users data");
+    }
+
+    const startIndx = parseInt(req.query.startIndx) || 0;
+    const limit = parseInt(req.query.limit)|| 9 ;
+    const sortDirection = req.query.sort === "asc" ? 1 : -1 ; 
+
+    const  users = await User.find().sort({ createdAt : sortDirection }).skip(startIndx).limit(limit);
+
+    const usersWithoutPass = users.map((user)=> {
+        const { password  : pass , ...rest } = user._doc ; 
+        return  rest ;
+    });
+
+    const  totlaUsers = await User.countDocuments();
+    const now = new Date();
+
+    const oneMonthAgo = new Date(
+        now.getFullYear(),
+        now.getMonth() - 1,
+        now.getDate(),
+    );
+
+    const lastMonthsUsers = await User.countDocuments({ createdAt: { $gte: oneMonthAgo } });
+
+    res.status(200).json({
+        usersWithoutPass,
+        totlaUsers,
+        lastMonthsUsers,
+    });
+}
