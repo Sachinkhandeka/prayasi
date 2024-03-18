@@ -30,7 +30,7 @@ module.exports.createBlogController = async(req , res)=> {
 
 //get all blog - get route handler
 module.exports.getAllBlogPostController = async(req ,res)=> {
-    const startIndex = parseInt(req.query.startIndex) || 0;
+    const startIndx = parseInt(req.query.startIndx) || 0;
     const limit = parseInt(req.query.limit) || 9;
     const sortDirection = req.query.order=== "asc" ? 1 : -1;
 
@@ -45,7 +45,7 @@ module.exports.getAllBlogPostController = async(req ,res)=> {
                 { content : { $regex : req.query.searchTerm , $option : 'i' } },           
             ],
         })
-    }).sort({ updatedAt : sortDirection }).skip(startIndex).limit(limit);
+    }).skip(startIndx).limit(limit).sort({ updatedAt : sortDirection });
 
     const totalPost = await BlogPost.countDocuments();
 
