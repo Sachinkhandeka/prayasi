@@ -103,7 +103,7 @@ module.exports.getAllUsers = async(req ,res)=> {
     const lastMonthsUsers = await User.countDocuments({ createdAt: { $gte: oneMonthAgo } });
 
     res.status(200).json({
-        usersWithoutPass,
+        user : usersWithoutPass,
         totlaUsers,
         lastMonthsUsers,
     });
