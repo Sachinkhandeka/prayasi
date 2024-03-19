@@ -35,4 +35,10 @@ router.get(
     wrapAsync(user.getAllUsers)
 );
 
+//get user for post
+router.get(
+    "/:userId",
+    wrapAsync(user.getUserController)
+)
+
 module.exports = router ; 

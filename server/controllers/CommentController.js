@@ -2,6 +2,7 @@ const Comment = require("../models/comment");
 const BlogPost =  require("../models/blog");
 const ExpressError = require("../utils/ExpressError");
 
+//create comment route handler
 module.exports.createCommentController = async(req ,res)=> {
     const currentUser = req.user;
     const { content, postId , userId } = req.body;
@@ -37,4 +38,12 @@ module.exports.createCommentController = async(req ,res)=> {
     newComment = await newComment.save();
 
     res.status(200).json(newComment)
+}
+
+//get comments route handler
+module.exports.getCommentsController = async(req ,res)=> {
+    const postId = req.params.postId ; 
+
+    const comments = await Comment.find({ postId : postId }).sort({ createdAt : -1 });
+    res.status(200).json(comments);
 }

@@ -94,6 +94,18 @@ module.exports.getAllUsers = async(req ,res)=> {
     });
 }
 
+//get user for post - get  route handler 
+module.exports.getUserController = async(req ,res)=> {
+    const userId = req.params.userId ; 
+
+    const user  = await User.findById(userId);
+    if(!user) {
+        throw new ExpressError(404 , "User not found");
+    }
+    const { password , ...rest } =  user._doc ; 
+    res.status(200).json(rest);
+}
+
 //destroy user route controller - delete route handler
 module.exports.deleteUserController = async(req, res)=> {
     const isAdmin = req.user.isAdmin ;
