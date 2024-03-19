@@ -34,12 +34,12 @@ const blogPostSchema = Joi.object({
 
 const updateBlogPostSchema = Joi.object({
     _id: Joi.string(), 
-    title: Joi.string().required(),
-    content: Joi.string().required(),
-    author: Joi.string().required(), 
-    category: Joi.string().required(),
+    title: Joi.string(),
+    content: Joi.string(),
+    author: Joi.string(), 
+    category: Joi.string(),
     image: Joi.string().default('https://www.hostinger.com/tutorials/wp-content/uploads/sites/2/2021/09/how-to-write-a-blog-post.png'),
-    slug: Joi.string().required(),
+    slug: Joi.string(),
     createdAt: Joi.date(), 
     updatedAt: Joi.date(),
     __v: Joi.number()
