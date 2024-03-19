@@ -11,6 +11,7 @@ const path = require("path");
 const userRoutes  = require("./routes/userRoute");
 const authRoutes = require("./routes/authRoute");
 const blogRoute = require("./routes/blogRoute");
+const commentRoute = require("./routes/CommentRoute");
 const ExpressError = require("./utils/ExpressError");
 const cookieParser = require("cookie-parser");
 
@@ -35,6 +36,7 @@ app.use(cookieParser());
 app.use("/api/user", userRoutes );
 app.use("/api/auth", authRoutes );
 app.use("/api/post", blogRoute );
+app.use("/api/comment",commentRoute);
 
 app.all("*" , (req ,res , next)=> {
     next(new ExpressError(404 , "Page Not Found"));

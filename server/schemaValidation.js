@@ -45,10 +45,19 @@ const updateBlogPostSchema = Joi.object({
     __v: Joi.number()
 }).options({ abortEarly: false });
 
+const commentSchema = Joi.object({
+    content: Joi.string().required(),
+    postId: Joi.string().required(),
+    author: Joi.string().required(),
+    likes: Joi.array().items(Joi.string()), // Assuming likes is an array of strings
+    numberOfLikes: Joi.number().integer().min(0).default(0)
+}).options({ abortEarly: false });
+
 module.exports =  {
     signinSchema,
     signupSchema,
     updateSchema,
     blogPostSchema,
     updateBlogPostSchema,
+    commentSchema,
 } 

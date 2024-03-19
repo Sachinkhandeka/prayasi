@@ -1,5 +1,5 @@
 const ExpressError = require("./utils/ExpressError");
-const { signupSchema, signinSchema, updateSchema , blogPostSchema, updateBlogPostSchema } = require("./schemaValidation");
+const { signupSchema, signinSchema, updateSchema , blogPostSchema, updateBlogPostSchema, commentSchema } = require("./schemaValidation");
 
 module.exports.validateSignupUser = (req, res, next) => {
     let { error } = signupSchema.validate(req.body);
@@ -47,6 +47,18 @@ module.exports.validateBlogPost =  (req ,res , next)=>  {
 
 module.exports.validateUpdateBlogPost = (req ,res,  next)=> {
     let { error } = updateBlogPostSchema.validate(req.body);
+
+    if(error) {
+        let errMsg = error.details.map((el)=> {
+            return el.message;
+        }).join(",");
+        throw new ExpressError(400 , errMsg);
+    }
+    next();
+}
+
+module.exports.validateComment = (req ,res,  next)=> {
+    let { error } = commentSchema.validate(req.body);
 
     if(error) {
         let errMsg = error.details.map((el)=> {
