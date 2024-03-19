@@ -76,16 +76,12 @@ export default function CreatePost() {
             }
             setFormData({ ...formData , author : currentUser._id });
             const blog = formData ; 
-            if(!blog) {
-                setSubmitError("Please provide all required field data.");
-                return ; 
-            }
             const response = await fetch(
                 "/api/post/create",
                 {
                     method : "POST",
                     headers : { "Content-Type" : "application/json" },
-                    body : JSON.stringify(blog)
+                    body : JSON.stringify(formData),
                 }
             );
             const data = await response.json();

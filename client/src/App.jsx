@@ -1,6 +1,7 @@
 import React from "react"
 import { Suspense } from "react";
 import { BrowserRouter,Routes, Route } from "react-router-dom"
+import { Spinner } from "flowbite-react";
 
 // pages import
 const Home = React.lazy(()=> import("./pages/Home"));
@@ -10,6 +11,7 @@ const Signup = React.lazy(()=> import("./pages/Signup"));
 const Dashboard = React.lazy(()=> import("./pages/Dashboard"));
 const Projects = React.lazy(()=> import("./pages/Projects"));
 const UpdatePost = React.lazy(()=> import("./pages/UpdatePost"));
+const PostPage = React.lazy(()=> import("./pages/PostPage"));
 const CreatePost = React.lazy(()=> import("./components/CreatePost"));
 
 //components import 
@@ -20,23 +22,106 @@ import OnlyAdminPrivateRoute from "./components/OnlyAdminPrivateRoute";
 
 
 export default function App() {
+  
   return (
     <>
     <BrowserRouter>
       <Header /> 
       <Routes>
-        <Route path="/" element={ <Suspense fallback={<div>Loading ...</div>}><Home /></Suspense> }/>
-        <Route path="/about" element={ <Suspense fallback={<div>Loading ...</div>}> <About /> </Suspense> }/>
-        <Route path="/signup" element={ <Suspense fallback={<div>Loading ...</div>} ><Signup /></Suspense> }/>
-        <Route path="/signin" element={ <Suspense fallback={<div>Loading ...</div>} ><Signin /></Suspense> }/>
+        <Route path="/" element={ 
+            <Suspense 
+               fallback={
+                  <div className="flex justify-center items-center min-h-screen gap-4" >
+                    <Spinner size={"xl"} />
+                    <div>Loading ...</div>
+                  </div>
+                }>
+                  <Home />
+            </Suspense> }/>
+        <Route path="/about" element={ 
+            <Suspense 
+              fallback={
+                <div className="flex justify-center items-center min-h-screen gap-4" >
+                  <Spinner size={"xl"} />
+                  <div>Loading ...</div>
+                </div>
+                }>
+                  <About /> 
+            </Suspense> }/>
+        <Route path="/signup" element={ 
+          <Suspense 
+            fallback={
+              <div className="flex justify-center items-center min-h-screen gap-4" >
+                <Spinner size={"xl"} />
+                <div>Loading ...</div>
+              </div>
+              }>
+                <Signup />
+          </Suspense> }/>
+        <Route path="/signin" element={ 
+            <Suspense 
+              fallback={
+                <div className="flex justify-center items-center min-h-screen gap-4" >
+                  <Spinner size={"xl"} />
+                  <div>Loading ...</div>
+                </div>
+              }>
+                <Signin />
+            </Suspense> }/>
         <Route element={ <PrivateRoute /> }>
-          <Route path="/dashboard" element={ <Suspense fallback={<div>Loading ...</div>} ><Dashboard /></Suspense> }/>
+          <Route path="/dashboard" element={ 
+            <Suspense 
+              fallback={
+                <div className="flex justify-center items-center min-h-screen gap-4" >
+                  <Spinner size={"xl"} />
+                  <div>Loading ...</div>
+                </div>
+              }>
+                <Dashboard />
+            </Suspense> }/>
         </Route>
         <Route element={<OnlyAdminPrivateRoute />} >
-          <Route path="/create-post" element={<Suspense fallback={<div>Loading...</div>} ><CreatePost/></Suspense>} />
-          <Route path="/update-post/:postId" element={<Suspense fallback={<div>Loading</div>} ><UpdatePost /></Suspense>} />
+          <Route path="/create-post" element={
+            <Suspense 
+              fallback={
+                <div className="flex justify-center items-center min-h-screen gap-4" >
+                  <Spinner size={"xl"} />
+                  <div>Loading ...</div>
+                </div>
+              } >
+                <CreatePost/>
+          </Suspense>} />
+          <Route path="/update-post/:postId" element={
+            <Suspense 
+              fallback={
+                <div className="flex justify-center items-center min-h-screen gap-4" >
+                  <Spinner size={"xl"} />
+                  <div>Loading ...</div>
+                </div>
+              }>
+                <UpdatePost />
+            </Suspense>} />
         </Route>
-        <Route path="/projects/" element={ <Suspense fallback={<div>Loading ...</div>}><Projects /></Suspense> }/>
+        <Route path="/projects" element={
+            <Suspense 
+              fallback={
+                <div className="flex justify-center items-center min-h-screen gap-4" >
+                  <Spinner size={"xl"} />
+                  <div>Loading ...</div>
+                </div>
+              }>
+                <Projects />
+            </Suspense> }/>
+        <Route path="/post/:postSlug" element={ 
+            <Suspense 
+              fallback={
+                <div className="flex justify-center items-center min-h-screen gap-4" >
+                  <Spinner size={"xl"} />
+                  <div>Loading ...</div>
+                </div> 
+              }>
+                <PostPage />
+            </Suspense> } />
       </Routes>
       <FooterComponent />
     </BrowserRouter>
