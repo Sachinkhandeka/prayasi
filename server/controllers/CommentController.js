@@ -47,3 +47,29 @@ module.exports.getCommentsController = async(req ,res)=> {
     const comments = await Comment.find({ postId : postId }).sort({ createdAt : -1 });
     res.status(200).json(comments);
 }
+
+//like comment route handler 
+module.exports.likeCommentController = async(req ,res)=> {
+    const commentId = req.params.commentId ; 
+    const userId = req.user.id ; 
+
+    const comment = await  Comment.findById(commentId);
+
+    if(!comment) {
+        throw new ExpressError(404 , "Comment not found");
+    }
+
+    const userIndx = comment.likes.indexOf(userId);
+
+    if(userIndx === -1) {
+        comment.numberOfLikes += 1 ; 
+        comment.likes.push(userId);
+    }else if (comment.numberOfLikes > 0) {
+        comment.numberOfLikes -= 1; 
+        comment.likes.splice(userIndx, 1);
+    }
+
+    await comment.save();
+
+    res.status(200).json(comment);
+}

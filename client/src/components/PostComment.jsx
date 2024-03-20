@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import moment  from "moment";
+import { FaThumbsUp } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
-export default function PostComment({ comment }) {
+export default function PostComment({ comment , handleLike }) {
+    const { currentUser } = useSelector(state => state.user);
     const [ user , setUser ] = useState({});
     useEffect(()=> {
         const getComments = async()=> {
@@ -15,13 +18,13 @@ export default function PostComment({ comment }) {
                 }
                 setUser(data);
             }catch(err) {
-                console.lof(err);
+                console.log(err);
             }
         }
         getComments();
     }, [comment]);
 
-    console.log(user);
+  
     return (
         <div className="flex items-center gap-3 p-4 border-b dark:border-b-gray-600 text-sm" >
             <div className="flex flex-shrink-0 mr-3" >
@@ -35,6 +38,20 @@ export default function PostComment({ comment }) {
                     </span>
                 </div>
                 <p className="text-gray-500 mb-2" >{ comment.content } </p>
+                <div className="flex items-center justify-start gap-2 pt-3 text-xs border-t dark:border-t-gray-700 max-w-fit" > 
+                    <button 
+                        className={`${currentUser &&  comment.likes.includes(currentUser._id)? 'text-blue-500' : 'text-gray-400' } hover:text-blue-500`} 
+                        type="button" 
+                        onClick={()=> handleLike(comment._id)} >
+                        <FaThumbsUp  className="text-sm "/>
+                    </button>
+                    <p  className="text-gray-400">
+                        {
+                            comment.numberOfLikes > 0  && comment.numberOfLikes + ' ' + 
+                            (comment.numberOfLikes === 1 ? 'Like' : 'Likes')
+                        }
+                    </p>
+                </div>
             </div>
         </div>
     )

@@ -14,8 +14,15 @@ router.post(
 //get comment 
 router.get(
     "/getcomment/:postId",
-    wrapAsync(comment.getCommentsController)
+    wrapAsync(comment.getCommentsController),
 );
+
+//like comment 
+router.put(
+    "/like/:commentId",
+    verifyToken,
+    wrapAsync(comment.likeCommentController),
+)
 
 module.exports = router ; 
 

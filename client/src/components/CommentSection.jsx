@@ -1,9 +1,8 @@
 import { Alert, Button, Textarea } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PostComment from "./PostComment";
-
 
 export default function CommentSection({ postId }) {
     const { currentUser } = useSelector(state => state.user);
@@ -11,6 +10,7 @@ export default function CommentSection({ postId }) {
     const [ error , setError ] = useState(null);
     const [ success , setSuccess ] = useState(null);
     const [ commentData , setCommentData ] = useState([]);
+    const navigate = useNavigate();
 
     const handleSubmit = async(e)=> {
         e.preventDefault();
@@ -60,6 +60,36 @@ export default function CommentSection({ postId }) {
         }
         getComments();
     },[postId]);
+
+    // handle like function 
+    const handleLike = async(commentId)=> {
+        try {
+            setError(null);
+            setSuccess(null);
+
+            if(!currentUser) {
+                navigate("/signin");
+                return;
+            }
+            const response = await fetch(`/api/comment/like/${commentId}` , { method : "PUT" });
+            const data = await response.json();
+
+            if(!response.ok) {
+                setError(data.message);
+                return ; 
+            }
+            setCommentData(commentData.map(comment => 
+                comment._id === commentId ? {
+                    ...comment,
+                    likes : data.likes,
+                    numberOfLikes : data.numberOfLikes,
+                } : comment 
+            ));
+
+        } catch(err) {
+            setError(err.message);
+        }
+    }
     return(
         <>
           <div className="max-w-4xl w-full mx-auto p-3" >
@@ -107,7 +137,7 @@ export default function CommentSection({ postId }) {
                         </div>
                     </div>
                     { commentData.map((comment)=> (
-                         <PostComment key={comment._id} comment={comment} />
+                         <PostComment key={comment._id} comment={comment} handleLike={handleLike} />
                     )) }
                     </>
                 ) }
