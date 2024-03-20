@@ -86,7 +86,7 @@ module.exports.editCommentController = async(req ,res)=> {
     if(!comment) {
         throw new ExpressError(404 , "Comment not found");
     }
-    if(!isAdmin && comment.userId !== userId) {
+    if(!isAdmin && comment.author !== userId) {
         throw new ExpressError(403 , "You are not allowed to edit this comment");
     }
 
@@ -96,4 +96,25 @@ module.exports.editCommentController = async(req ,res)=> {
         throw new ExpressError(400 , "Some error occured while updatng");
     }
     res.status(200).json(editedComment);
+}
+
+//destroy comment route handler 
+module.exports.deleteCommentController = async(req , res)=> {
+    const userId = req.user.id ; 
+    const commentId = req.params.commentId; 
+    const isAdmin = req.user.isAdmin ; 
+
+    const comment = await Comment.findById(commentId);
+
+    if(!comment) {
+        throw new ExpressError(404 , "Comment not found");
+    }
+
+    if(!isAdmin && comment.author !== userId) {
+        throw new ExpressError(403 , "You are not allowed to delete this comment");
+    }
+
+    await Comment.findByIdAndDelete(commentId);
+
+    res.status(200).json("Comment deleted successfully");
 }

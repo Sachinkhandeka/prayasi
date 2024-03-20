@@ -28,6 +28,12 @@ router.put(
     "/edit/:commentId",
     verifyToken,
     wrapAsync(comment.editCommentController),
+);
+//delete comment
+router.delete(
+    "/delete/:commentId",
+    verifyToken,
+    wrapAsync(comment.deleteCommentController),
 )
 
 module.exports = router ; 
