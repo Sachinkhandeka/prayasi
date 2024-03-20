@@ -92,13 +92,14 @@ export default function CommentSection({ postId }) {
     }
 
     //edit comment function 
-    const handleEdit = async( comment, content) => {
+    const handleEdit = async( comment, editedContent) => {
         try { 
+            console.log("inside try");
             setCommentData(commentData.map(c => 
                     c._id === comment._id ? {
                         ...comment,
-                        content,
-                    } : comment        
+                        content : editedContent,
+                    } : c       
             ));
         } catch(err) {
             console.log(err);
