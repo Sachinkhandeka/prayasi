@@ -22,6 +22,12 @@ router.put(
     "/like/:commentId",
     verifyToken,
     wrapAsync(comment.likeCommentController),
+);
+//edit comment 
+router.put(
+    "/edit/:commentId",
+    verifyToken,
+    wrapAsync(comment.editCommentController),
 )
 
 module.exports = router ; 

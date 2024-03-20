@@ -73,3 +73,28 @@ module.exports.likeCommentController = async(req ,res)=> {
 
     res.status(200).json(comment);
 }
+
+//edit comment route handler
+module.exports.editCommentController = async(req ,res)=> {
+    const isAdmin = req.user.isAdmin ;
+    const userId = req.user.id ; 
+    const commentId = req.params.commentId ; 
+    const content = req.body ; 
+
+    //search for  the comment in DB 
+    const comment = await Comment.findById(commentId);
+
+    if(!comment) {
+        throw new ExpressError(404 , "Comment not found");
+    }
+    if(!isAdmin && comment.userId !== userId) {
+        throw new ExpressError(403 , "You are not allowed to edit this comment");
+    }
+
+    const editedComment = await Comment.findByIdAndUpdate(commentId , { content : content } , { new : true });
+
+    if(!editedComment) {
+        throw new ExpressError(400 , "Some error occured while updatng");
+    }
+    res.status(200).json(editedComment);
+}

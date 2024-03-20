@@ -2,10 +2,15 @@ import { useEffect, useState } from "react";
 import moment  from "moment";
 import { FaThumbsUp } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { Button, Textarea } from "flowbite-react";
 
-export default function PostComment({ comment , handleLike }) {
+export default function PostComment({ comment , handleLike , onEdit }) {
     const { currentUser } = useSelector(state => state.user);
     const [ user , setUser ] = useState({});
+    const [ isEditCliked ,  setIsEditCliked ] = useState(false);
+    const [ content , setContent ] = useState(comment.content);
+   
+
     useEffect(()=> {
         const getComments = async()=> {
             try{
@@ -24,7 +29,29 @@ export default function PostComment({ comment , handleLike }) {
         getComments();
     }, [comment]);
 
-  
+    const handleSave = async()=> {
+        try {
+            const response = await fetch(
+                `/api/comment/edit/${comment._id}`,
+                {
+                    method : "PUT",
+                    headers : { "Content-Type" : "application/json" },
+                    body : JSON.stringify(content),
+                }
+            );
+            const data = await response.json();
+            console.log(data);
+            if(!response.ok) {
+                console.log(data.message);
+            }
+
+            setIsEditCliked(false);
+            onEdit(comment , content);
+
+        } catch(err) {
+            console.log(err.message);
+        }
+    }
     return (
         <div className="flex items-center gap-3 p-4 border-b dark:border-b-gray-600 text-sm" >
             <div className="flex flex-shrink-0 mr-3" >
@@ -37,7 +64,19 @@ export default function PostComment({ comment , handleLike }) {
                         { moment(comment.createdAt).fromNow() }
                     </span>
                 </div>
-                <p className="text-gray-500 mb-2" >{ comment.content } </p>
+                {
+                    isEditCliked ? (
+                        <>
+                        <Textarea value={content} onChange={(e)=> setContent(e.target.value)} />
+                        <div className="flex justify-end items-center gap-4 mt-4 p-1" >
+                            <Button gradientDuoTone={"purpleToBlue"} onClick={handleSave} size={"sm"} >Update</Button>
+                            <Button onClick={()=> setIsEditCliked(false)} size={"sm"} color="gray" >Cancel</Button>
+                        </div>
+                        </>
+                    ) : (
+                        <p className="text-gray-500 mb-2" >{ comment.content }</p>
+                    )
+                }
                 <div className="flex items-center justify-start gap-2 pt-3 text-xs border-t dark:border-t-gray-700 max-w-fit" > 
                     <button 
                         className={`${currentUser &&  comment.likes.includes(currentUser._id)? 'text-blue-500' : 'text-gray-400' } hover:text-blue-500`} 
@@ -51,6 +90,14 @@ export default function PostComment({ comment , handleLike }) {
                             (comment.numberOfLikes === 1 ? 'Like' : 'Likes')
                         }
                     </p>
+                    {
+                        currentUser && (currentUser._id === comment.author || currentUser.isAdmin) && 
+                        (
+                            <button type="button" className="text-gray-400 hover:text-blue-500 hover:underline" onClick={()=>setIsEditCliked(true)} >
+                                Edit
+                            </button>
+                        )
+                    }
                 </div>
             </div>
         </div>

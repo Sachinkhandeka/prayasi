@@ -90,6 +90,20 @@ export default function CommentSection({ postId }) {
             setError(err.message);
         }
     }
+
+    //edit comment function 
+    const handleEdit = async( comment, content) => {
+        try { 
+            setCommentData(commentData.map(c => 
+                    c._id === comment._id ? {
+                        ...comment,
+                        content,
+                    } : comment        
+            ));
+        } catch(err) {
+            console.log(err);
+        }
+    }
     return(
         <>
           <div className="max-w-4xl w-full mx-auto p-3" >
@@ -137,7 +151,7 @@ export default function CommentSection({ postId }) {
                         </div>
                     </div>
                     { commentData.map((comment)=> (
-                         <PostComment key={comment._id} comment={comment} handleLike={handleLike} />
+                         <PostComment key={comment._id} comment={comment} handleLike={handleLike} onEdit={handleEdit} />
                     )) }
                     </>
                 ) }
