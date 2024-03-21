@@ -12,7 +12,7 @@ router.post(
     validateBlogPost,
     wrapAsync(blog.createBlogController)
 );
-//get all post route
+//get all posts data route
 router.get(
     "/getposts",
     wrapAsync(blog.getAllBlogPostController),

@@ -76,7 +76,7 @@ module.exports.getAllUsers = async(req ,res)=> {
         return  rest ;
     });
 
-    const  totlaUsers = await User.countDocuments();
+    const  totalUsers = await User.countDocuments();
     const now = new Date();
 
     const oneMonthAgo = new Date(
@@ -89,7 +89,7 @@ module.exports.getAllUsers = async(req ,res)=> {
 
     res.status(200).json({
         users : usersWithoutPass,
-        totlaUsers,
+        totalUsers,
         lastMonthsUsers,
     });
 }

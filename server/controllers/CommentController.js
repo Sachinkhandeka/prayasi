@@ -62,8 +62,8 @@ module.exports.getAllCommentsController = async(req ,res)=> {
         now.getDate(),
     );
 
-    const lastMonthComment = await Comment.countDocuments({ createdAt : { $gte : oneMonthAgo} });
-    res.status(200).json({comments , totalComments , lastMonthComment});
+    const lastMonthComments = await Comment.countDocuments({ createdAt : { $gte : oneMonthAgo} });
+    res.status(200).json({comments , totalComments , lastMonthComments});
 }
 
 

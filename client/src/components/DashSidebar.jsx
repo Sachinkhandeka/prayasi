@@ -50,9 +50,14 @@ export default function DashSidebar() {
                 </Link>
                 {
                     currentUser.isAdmin && (
+                        <>
+                        <Link to="/dashboard?tab=dashboard">
+                            <Sidebar.Item active={tab === "dashboard"} icon={HiChartPie} as={"div"} >Dashboard</Sidebar.Item>
+                        </Link>
                         <Link to="/dashboard?tab=posts">
                             <Sidebar.Item active={tab === "posts"}  icon={HiOutlineBookOpen} as={"div"} >Blogs</Sidebar.Item>
                         </Link>
+                        </>
                          
                     )
                 }
