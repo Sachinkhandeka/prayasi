@@ -10,6 +10,12 @@ router.post(
     verifyToken,
     wrapAsync(comment.createCommentController),
 );
+//get all comments
+router.get(
+    "/getcomment",
+    verifyToken,
+    wrapAsync(comment.getAllCommentsController),
+);
 
 //get comment 
 router.get(
@@ -34,7 +40,7 @@ router.delete(
     "/delete/:commentId",
     verifyToken,
     wrapAsync(comment.deleteCommentController),
-)
+);
 
 module.exports = router ; 
 

@@ -40,6 +40,33 @@ module.exports.createCommentController = async(req ,res)=> {
     res.status(200).json(newComment)
 }
 
+//get all comments route handler 
+module.exports.getAllCommentsController = async(req ,res)=> {
+    const startIndx = parseInt(req.query.startIndx) || 0 ; 
+    const limit = parseInt(req.query.limit) || 9 ;
+    const shortDirection = req.query.order === "asc"? 1: -1 ; 
+    const isAdmin = req.user.isAdmin ;
+
+    //check if user is admin or not
+    if(!isAdmin) {
+        throw new ExpressError(403 , "You are not allowed to get all comments data");
+    }
+    const comments = await Comment.find({}).skip(startIndx).limit(limit).sort({ updatedAt : shortDirection});
+
+    const totalComments  = await Comment.countDocuments();
+
+    const now = new Date();
+    const oneMonthAgo = new Date(
+        now.getFullYear(),
+        now.getMonth() - 1,
+        now.getDate(),
+    );
+
+    const lastMonthComment = await Comment.countDocuments({ createdAt : { $gte : oneMonthAgo} });
+    res.status(200).json({comments , totalComments , lastMonthComment});
+}
+
+
 //get comments route handler
 module.exports.getCommentsController = async(req ,res)=> {
     const postId = req.params.postId ; 

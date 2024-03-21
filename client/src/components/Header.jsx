@@ -62,7 +62,7 @@ export default function Header() {
                             <Dropdown.Item icon={HiCog} as={"div"}>Settings</Dropdown.Item>
                         </Link>
                         <Dropdown.Divider />
-                        <Link to="/signout" >
+                        <Link to="/home" >
                             <Dropdown.Item icon={HiLogout} as={"div"} onClick={handleSignout} >Sign out</Dropdown.Item>
                         </Link>       
                     </Dropdown>

@@ -5,29 +5,29 @@ import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { FaCheck , FaTimes } from "react-icons/fa";
 
-export default function DahsUsers() {
+export default function DashComments() {
     const { currentUser } = useSelector(state => state.user);
     const [ success , setSuccess ] = useState(null);
     const [ error , setError ] = useState(null);
-    const [ allUsers , setAllUsers ] = useState([]);
+    const [ allComments , setAllComments ] = useState([]);
     const [ showMore , setShowMore ] = useState(true);
     const [ showModal , setShowModal ] = useState(false);
-    const [ userToDelete , setUserToDelete ] = useState("");
+    const [ commentIdToDelete , setCommentIdToDelete ] = useState("");
 
     //fetch all users
-    const fetchUsers = async()=> {
+    const fetchComments = async()=> {
         try{
             setError(null);
             setSuccess(null);
-            const response = await fetch("/api/user/getusers", { method : "GET" });
+            const response = await fetch("/api/comment/getcomment", { method : "GET" });
             const data = await response.json();
 
             if(!response.ok) {
                 setError(data.message);
                 return;
             }
-            setAllUsers(data.users);
-            if(data.users.length < 9 ) {
+            setAllComments(data.comments);
+            if(data.comments.length < 9 ) {
                 setShowMore(false);
             }
         } catch(err) {
@@ -37,19 +37,19 @@ export default function DahsUsers() {
 
     useEffect(()=> {
         if(currentUser.isAdmin) {
-            fetchUsers();
+            fetchComments();
         }
     }, [currentUser._id]);
 
     //handle show more functionality 
     const handleShowMore = async()=> {
-        const startIndx  = allUsers.length ; 
+        const startIndx  = allComments.length ; 
         try {
-            const response = await fetch(`/api/user/getusers/?startIndx=${startIndx}`);
+            const response = await fetch(`/api/comment/getcomment/?startIndx=${startIndx}`);
             const data = await response.json();
             if(response.ok) {
-                setAllUsers((prev)=> [ ...prev , ...data.users]);
-                if(data.users.length < 9) {
+                setAllComments((prev)=> [ ...prev , ...data.comments]);
+                if(data.comments.length < 9) {
                     setShowMore(false);
                 }
             }
@@ -58,24 +58,23 @@ export default function DahsUsers() {
             return ; 
         }
     }
-
     //handle delete user function 
-    const handleDeleteUser = async()=> {
+    const handleDeleteComment = async()=> {
         setShowModal(false);
         setError(null);
         setSuccess(null);
         try{
-            const response = await fetch(`/api/user/delete/${userToDelete}`, { method : "DELETE" });
+            const response = await fetch(`/api/comment/delete/${commentIdToDelete}`, { method : "DELETE" });
             const  data = await response.json();
 
             if(!response.ok) {
                 setError(data.message);
                 return; 
             } else  {
-                setAllUsers((prev)=> {
-                    return prev.filter((user)=> user._id !== userToDelete);
+                setAllComments((prev)=> {
+                    return prev.filter((comment)=> comment._id !== commentIdToDelete);
                 });
-                setSuccess("User deleted successfully");
+                setSuccess("Comment deleted successfully");
             }
         }
         catch(err){
@@ -91,39 +90,35 @@ export default function DahsUsers() {
             { error && ( <Alert color={"failure"} onDismiss={()=> setError(null)} className="mx-auto mb-4" >{ error }</Alert> ) }
             { success && ( <Alert color={"success"} onDismiss={()=> setSuccess(null)} className="mx-auto mb-4" >{ success }</Alert> ) }
             {
-                currentUser.isAdmin && allUsers &&  allUsers.length > 0 ? (
+                currentUser.isAdmin && allComments &&  allComments.length > 0 ? (
                     <>
                     <Table hoverable className="shadow-md" >
                         <Table.Head>
-                            <Table.HeadCell>Date created</Table.HeadCell>
-                            <Table.HeadCell>User image</Table.HeadCell>
-                            <Table.HeadCell>Username</Table.HeadCell>
-                            <Table.HeadCell>Email</Table.HeadCell>
-                            <Table.HeadCell>Admin</Table.HeadCell>
+                            <Table.HeadCell>Date updated</Table.HeadCell>
+                            <Table.HeadCell>Comment content</Table.HeadCell>
+                            <Table.HeadCell>Number of likes</Table.HeadCell>
+                            <Table.HeadCell>postId</Table.HeadCell>
+                            <Table.HeadCell>userId</Table.HeadCell>
                             <Table.HeadCell>Delete</Table.HeadCell>
                         </Table.Head>
-                        { allUsers.map((user)=> (
-                            <Table.Body className="divide-y" key={user._id}>
+                        { allComments.map((comment)=> (
+                            <Table.Body className="divide-y" key={comment._id}>
                                 <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                                    <Table.Cell>{ new Date( user.createdAt).toLocaleDateString() }</Table.Cell>
+                                    <Table.Cell>{ new Date( comment.updatedAt).toLocaleDateString() }</Table.Cell>
                                     <Table.Cell>
-                                        <Link to={`/user/${user._id}`} >
-                                            <img src={user.profilePicture} alt={user.username} className=" w-10 h-10 rounded-full object-cover bg-gray-500" />
-                                        </Link>
+                                        {comment.content}
                                     </Table.Cell>
                                     <Table.Cell>
-                                        <Link to={`/user/${user._id}`}  className="font-medium text-gray-900 dark:text-white" >
-                                            { user.username }
-                                        </Link>
+                                        {comment.numberOfLikes}
                                     </Table.Cell>
-                                    <Table.Cell>{ user.email }</Table.Cell>
-                                    <Table.Cell>{ user.isAdmin  ? ( <FaCheck className="text-green-500" /> ) : ( <FaTimes className="text-red-500" /> )}</Table.Cell>
+                                    <Table.Cell>{ comment.postId }</Table.Cell>
+                                    <Table.Cell>{comment.author}</Table.Cell>
                                     <Table.Cell>
                                         <span 
                                            className="text-red-500 font-semibold hover:underline cursor-pointer"
                                            onClick={()=> {
                                             setShowModal(true);
-                                            setUserToDelete(user._id);
+                                            setCommentIdToDelete(comment._id);
                                            }}
                                         >
                                             Delete
@@ -138,7 +133,7 @@ export default function DahsUsers() {
                     )}
                     </>
                 ) : (
-                    <p>This app has no users yet</p>
+                    <p>You have no comments yet</p>
                 )}
                 <Modal show={showModal} onClose={()=> setShowModal(false)} popup size={"md"}>
                 <Modal.Header />
@@ -146,10 +141,10 @@ export default function DahsUsers() {
                     <div className="text-center">
                         <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
                         <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                            Are you sure you want to delete this user?
+                            Are you sure you want to delete this comment?
                         </h3>
                         <div className="flex justify-center gap-4">
-                            <Button color="failure" onClick={handleDeleteUser}>{"Yes, I'm sure"}</Button>
+                            <Button color="failure" onClick={handleDeleteComment}>{"Yes, I'm sure"}</Button>
                             <Button color="gray" onClick={()=> setShowModal(false)}>No, cancel</Button>
                         </div>
                     </div>

@@ -59,7 +59,7 @@ export default function Signin() {
             </div>
             <div className="border border-gray-200 px-6 py-4 rounded-lg shadow-lg w-full mx-10 max-w-xl" >
                 { errMsg && (
-                   <Alert className="mt-5 max-w-lg mx-auto" color="failure"> { errMsg }</Alert>
+                   <Alert className="mt-5 max-w-lg mx-auto" color="failure" onDismiss={()=> dispatch(signInFailure(null))}> { errMsg }</Alert>
                 )}
                 <form onSubmit={handleSubmit} className="px-10">
                     <div className="mt-6" >

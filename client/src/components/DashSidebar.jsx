@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Sidebar } from "flowbite-react";
-import { HiArrowSmRight, HiChartPie, HiInbox, HiOutlineUserGroup, HiUser } from 'react-icons/hi';
+import { HiAnnotation, HiArrowSmRight, HiBookmark, HiChartBar, HiChartPie, HiInbox, HiOutlineBookOpen, HiOutlineUserGroup, HiUser } from 'react-icons/hi';
 import { signoutSuccess } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -51,16 +51,21 @@ export default function DashSidebar() {
                 {
                     currentUser.isAdmin && (
                         <Link to="/dashboard?tab=posts">
-                            <Sidebar.Item active={tab === "posts"}  icon={HiChartPie} as={"div"} >Blogs</Sidebar.Item>
+                            <Sidebar.Item active={tab === "posts"}  icon={HiOutlineBookOpen} as={"div"} >Blogs</Sidebar.Item>
                         </Link>
                          
                     )
                 }
                 {
                     currentUser.isAdmin && (
+                        <>
                         <Link to="/dashboard?tab=users">
                             <Sidebar.Item active={tab === "users"} icon={HiOutlineUserGroup} as={"div"} >Users</Sidebar.Item>
                         </Link>
+                        <Link to="/dashboard?tab=comments">
+                            <Sidebar.Item active={tab === "comments"} icon={HiAnnotation} as={"div"}>Comments</Sidebar.Item>
+                        </Link>
+                        </>
                     )
                 }
                 <Sidebar.Item href="#" icon={HiInbox} label={"12"} labelColor={"dark"} >Inbox</Sidebar.Item>
