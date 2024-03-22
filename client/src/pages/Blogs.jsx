@@ -100,9 +100,9 @@ export default function Blogs() {
      },[]);
     return(
         <>
-        <div className="bg-gradient-to-b from-green-500 to-green-50 min-h-screen dark:from-gray-300 to-gray-900">
-            <h1 className="font-bold text-2xl font-mono uppercase text-center m-t4 p-3 dark:text-black" >Prayasi blogs</h1>
-            <div className="w-[90%] bg-white mx-auto mt-20 p-4 dark:bg-gray-800">
+        <div className="bg-gradient-to-b from-green-400 to-green-50 min-h-screen dark:from-gray-500 dark:to-gray-900">
+            <h1 className="font-bold text-2xl font-mono uppercase text-center m-t4 p-3 dark:text-white" >Prayasi blogs</h1>
+            <div className="w-[90%] bg-white mx-auto mt-20 p-4 dark:bg-gray-800 rounded-lg rounded-br-none rounded-bl-none">
                 {
                     posts && posts.length > 0 && (
                         <div className="flex flex-col gap-6" >
