@@ -9,7 +9,7 @@ const About = React.lazy(()=> import("./pages/About"));
 const Signin = React.lazy(()=> import("./pages/Signin"));
 const Signup = React.lazy(()=> import("./pages/Signup"));
 const Dashboard = React.lazy(()=> import("./pages/Dashboard"));
-const Projects = React.lazy(()=> import("./pages/Projects"));
+const Blogs = React.lazy(()=> import("./pages/Blogs"));
 const UpdatePost = React.lazy(()=> import("./pages/UpdatePost"));
 const PostPage = React.lazy(()=> import("./pages/PostPage"));
 const Search = React.lazy(()=> import("./pages/Search"));
@@ -106,7 +106,7 @@ export default function App() {
                 <UpdatePost />
             </Suspense>} />
         </Route>
-        <Route path="/projects" element={
+        <Route path="/blogs" element={
             <Suspense 
               fallback={
                 <div className="flex justify-center items-center min-h-screen gap-4" >
@@ -114,7 +114,7 @@ export default function App() {
                   <div>Loading ...</div>
                 </div>
               }>
-                <Projects />
+                <Blogs />
             </Suspense> }/>
         <Route path="/post/:postSlug" element={ 
             <Suspense 
