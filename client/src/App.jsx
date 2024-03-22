@@ -12,7 +12,9 @@ const Dashboard = React.lazy(()=> import("./pages/Dashboard"));
 const Projects = React.lazy(()=> import("./pages/Projects"));
 const UpdatePost = React.lazy(()=> import("./pages/UpdatePost"));
 const PostPage = React.lazy(()=> import("./pages/PostPage"));
+const Search = React.lazy(()=> import("./pages/Search"));
 const CreatePost = React.lazy(()=> import("./components/CreatePost"));
+
 
 //components import 
 import Header from "./components/Header";
@@ -124,6 +126,18 @@ export default function App() {
               }>
                 <PostPage />
             </Suspense> } />
+        <Route path="/search" element={
+            <Suspense 
+              fallback={
+                <div className="flex justify-center items-center min-h-screen gap-4" >
+                  <Spinner size={"xl"} />
+                  <div>Loading ...</div>
+                </div> 
+              }
+            >
+              <Search />
+            </Suspense>
+        } />
       </Routes>
       <FooterComponent />
     </BrowserRouter>
