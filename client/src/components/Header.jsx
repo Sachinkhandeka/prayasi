@@ -1,8 +1,8 @@
-import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react";
+import { Avatar, Button, Dropdown, Modal, Navbar, TextInput } from "flowbite-react";
 import { Link, useLocation , useNavigate, useParams } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon , FaSun } from "react-icons/fa";
-import { HiCog, HiLogout, HiViewGrid } from 'react-icons/hi';
+import { HiCog, HiLogout, HiOutlineSearch, HiViewGrid } from 'react-icons/hi';
 import Brand from "./Brand";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../redux/theme/themeSlice";
@@ -16,6 +16,7 @@ export default function Header() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [ searchTerm , setSearchTerm ] = useState('');
+    const [ showModal , setShowModal ] = useState(false);
 
      //handle signout 
      const handleSignout = async()=> {
@@ -49,7 +50,7 @@ export default function Header() {
 
     const handleSearch = (e)=> {
         e.preventDefault();
-
+        setShowModal(false);
         const urlParams = new URLSearchParams(location.search);
         urlParams.set('searchTerm', searchTerm);
         const searchQuery = urlParams.toString();
@@ -68,11 +69,25 @@ export default function Header() {
                    className="hidden md:block" 
                 />
             </form>
-            <Button className="md:hidden "  color="gray" pill >
+            <Button className="md:hidden "  color="gray" pill onClick={()=> setShowModal(true)}  >
                 <AiOutlineSearch />
             </Button>
+            <Modal show={showModal} size={"md"} onClose={()=> setShowModal(false)} popup>
+                <Modal.Header />
+                <Modal.Body>
+                    <form onSubmit={handleSearch} className="flex gap-4 flex-wrap items-center">
+                        <TextInput 
+                            type="text" 
+                            placeholder="Search..." 
+                            value={searchTerm} onChange={(e)=> setSearchTerm(e.target.value)} 
+                            className="" 
+                        />
+                        <Button type="submit" onClick={handleSearch} ><HiOutlineSearch /></Button>
+                    </form>
+                </Modal.Body>
+            </Modal>
             <div className="flex items-center gap-4 md:order-2 " >
-                <Button className="w-12 h-10 hidden md:block" color="gray" pill onClick={()=> dispatch(toggleTheme())} > 
+                <Button className="w-12 h-10 md:block" color="gray" pill onClick={()=> dispatch(toggleTheme())} > 
                     { theme === "dark" ? <FaSun /> : <FaMoon /> }
                 </Button>
                 { currentUser ? (

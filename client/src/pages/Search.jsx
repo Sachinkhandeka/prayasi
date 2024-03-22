@@ -135,7 +135,7 @@ export default function Search() {
             <div className="p-7 border-b md:border-r md:min-h-screen border-gray-500" >
                 <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
                     <div className="flex items-center gap-4">
-                        <label className="whitespace-nowrap font-semibold" >Search Term : </label>
+                        <label className="whitespace-nowrap font-semibold" >Search Term</label>
                         <TextInput 
                             placeholder="Search..." 
                             id="searchTerm"
@@ -145,14 +145,14 @@ export default function Search() {
                         />
                     </div>
                     <div className="flex items-center gap-3" >
-                        <label className="font-semibold" >Sort : </label>
+                        <label className="font-semibold" >Sort</label>
                         <Select onChange={handleChange} value={sidebarData.sort} id="sort">
                             <option value="desc">Latest</option>
                             <option value="asc">Oldest</option>
                         </Select>
                     </div>
                     <div className="flex items-center gap-3" >
-                        <label className="font-semibold" >Category : </label>
+                        <label className="font-semibold" >Category</label>
                         <Select onChange={handleChange} value={sidebarData.category} id="category">
                             <option value="uncategorized">Select a category</option>
                             <option value="technology">Technology</option>
