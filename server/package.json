@@ -92,6 +92,7 @@
     "dev": "nodemon index.js",
     "start" : "node index.js",
     "build": "npm --prefix server install && npm --prefix server run build && npm --prefix client install && npm --prefix client run build"
+
   },
   "keywords": [],
   "author": "",
