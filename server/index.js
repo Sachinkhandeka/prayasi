@@ -38,6 +38,10 @@ app.use("/api/auth", authRoutes );
 app.use("/api/post", blogRoute );
 app.use("/api/comment",commentRoute);
 
+//static folder for client side pages 
+app.use(express.static((path.join(__dirname , "/client/dist"))));
+
+
 app.all("*" , (req ,res , next)=> {
     next(new ExpressError(404 , "Route Not Found"));
 });
