@@ -13,6 +13,7 @@ const Blogs = React.lazy(()=> import("./pages/Blogs"));
 const UpdatePost = React.lazy(()=> import("./pages/UpdatePost"));
 const PostPage = React.lazy(()=> import("./pages/PostPage"));
 const Search = React.lazy(()=> import("./pages/Search"));
+const Privacy = React.lazy(()=> import("./pages/Privacy"));
 const CreatePost = React.lazy(()=> import("./components/CreatePost"));
 
 
@@ -136,6 +137,18 @@ export default function App() {
               }
             >
               <Search />
+            </Suspense>
+        } />
+      <Route path="/privacy" element={
+            <Suspense 
+              fallback={
+                <div className="flex justify-center items-center min-h-screen gap-4" >
+                  <Spinner size={"xl"} />
+                  <div>Loading ...</div>
+                </div> 
+              }
+            >
+              <Privacy />
             </Suspense>
         } />
       </Routes>

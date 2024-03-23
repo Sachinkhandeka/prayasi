@@ -73,7 +73,6 @@ export default function DashSidebar() {
                         </>
                     )
                 }
-                <Sidebar.Item href="#" icon={HiInbox} label={"12"} labelColor={"dark"} >Inbox</Sidebar.Item>
                 <Sidebar.Item href="#" icon={HiArrowSmRight} onClick={handleSignout} >Sign Out</Sidebar.Item>
             </Sidebar.ItemGroup>
         </Sidebar.Items>

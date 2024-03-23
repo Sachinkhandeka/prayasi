@@ -99,9 +99,6 @@ export default function Header() {
                         <Link to="/dashboard?tab=profile" >
                             <Dropdown.Item icon={HiViewGrid} as={"div"} >Dashboard</Dropdown.Item>
                         </Link>
-                        <Link to="/settings">
-                            <Dropdown.Item icon={HiCog} as={"div"}>Settings</Dropdown.Item>
-                        </Link>
                         <Dropdown.Divider />
                         <Link to="/home" >
                             <Dropdown.Item icon={HiLogout} as={"div"} onClick={handleSignout} >Sign out</Dropdown.Item>

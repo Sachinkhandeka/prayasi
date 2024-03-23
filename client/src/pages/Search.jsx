@@ -13,7 +13,7 @@ export default function Search() {
     });
     const [ posts , setPosts ] = useState([]);
     const [ loading , setLoading ] = useState(false);
-    const [ shoowMore , setShowMore ] = useState(false);
+    const [ showMore , setShowMore ] = useState(false);
 
     useEffect(()=> {
         const urlParams = new URLSearchParams(location.search);
@@ -195,7 +195,7 @@ export default function Search() {
                         )
                     }
                     {
-                        shoowMore && (
+                        showMore && (
                             <button className="text-teal-500 text-lg outline-0 border-none hover:underline p-7 w-full mx-auto" onClick={handleShowMore} >Show More</button>
                         )
                     }

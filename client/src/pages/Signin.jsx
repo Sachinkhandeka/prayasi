@@ -61,6 +61,10 @@ export default function Signin() {
                 { errMsg && (
                    <Alert className="mt-5 max-w-lg mx-auto" color="failure" onDismiss={()=> dispatch(signInFailure(null))}> { errMsg }</Alert>
                 )}
+                <p className="text-gray-600 flex justify-between items-center text-sm " >
+                    <span>email:demouser@gmail.com</span> 
+                    <span>pass:123456</span>
+                </p>
                 <form onSubmit={handleSubmit} className="px-10">
                     <div className="mt-6" >
                         <Label value="email" />
