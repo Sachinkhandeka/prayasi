@@ -91,7 +91,7 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start" : "node index.js",
-    "build": "npm install && run build && npm --prefix client install && npm --prefix client run build"
+    "build": "npm run install-all-deps && npm run build"
   },
   "keywords": [],
   "author": "",
