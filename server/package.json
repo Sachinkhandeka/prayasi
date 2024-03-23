@@ -91,7 +91,7 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start" : "node index.js",
-    "build": "npm install && cd server && npm install && cd .. && npm run build --prefix server && cd client && npm install && npm run build && cd .."
+    "build": "npm install --prefix server && npm run build --prefix server && npm install --prefix client && npm run build --prefix client"
   },
   "keywords": [],
   "author": "",
