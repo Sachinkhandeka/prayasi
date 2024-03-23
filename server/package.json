@@ -91,7 +91,8 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start" : "node index.js",
-    "build": "npm run install-all-deps && npm run build"
+    "build": "npm run install-all-deps && npm run build",
+    "server-build": "npm run build"
   },
   "keywords": [],
   "author": "",
