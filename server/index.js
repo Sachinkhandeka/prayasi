@@ -38,7 +38,6 @@ app.use("/api/auth", authRoutes );
 app.use("/api/post", blogRoute );
 app.use("/api/comment",commentRoute);
 
-const __dirname = path.resolve();
 
 //static folder for client side pages 
 app.use(express.static((path.join(__dirname , '../client/dist'))));
