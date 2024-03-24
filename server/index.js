@@ -2,7 +2,7 @@ if(process.env.NODE_ENV !== "production") {
     require("dotenv").config();
 }
 const express = require("express");
-const port =  8080 ; 
+const port = process.env.PORT || 8080;
 const app = express();
 const mongoose = require("mongoose");
 const DB_URL = process.env.MONGO_DB_URL ; 
@@ -39,7 +39,7 @@ app.use("/api/post", blogRoute );
 app.use("/api/comment",commentRoute);
 
 //static folder for client side pages 
-app.use(express.static((path.join(__dirname , "dist"))));
+app.use(express.static((path.join(__dirname , "client/dist"))));
 
 
 app.all("*" , (req ,res , next)=> {
