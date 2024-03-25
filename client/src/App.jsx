@@ -139,7 +139,18 @@ export default function App() {
               <Search />
             </Suspense>
         } />
-      <Route path="/privacy" element={ <Privacy /> } />
+      <Route path="/privacy" element={
+            <Suspense 
+              fallback={
+                <div className="flex justify-center items-center min-h-screen gap-4" >
+                  <Spinner size={"xl"} />
+                  <div>Loading ...</div>
+                </div> 
+              }
+            >
+              <Privacy />
+            </Suspense>
+        } />
       </Routes>
       <FooterComponent />
     </BrowserRouter>
