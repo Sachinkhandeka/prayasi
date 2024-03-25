@@ -15,7 +15,7 @@ export default function FooterComponent() {
                         <div>
                         <Footer.Title title="Get to Know Us" className="text-black dark:text-white font-bold" />
                         <Footer.LinkGroup col>
-                            <Footer.Link href="/about" target="_blank" rel="noopener noreferer" >
+                            <Footer.Link href="/about">
                                 About us
                             </Footer.Link>
                             <Footer.Link href="#" target="_blank" rel="noopener noreferer" >
@@ -46,10 +46,10 @@ export default function FooterComponent() {
                         <div>
                             <Footer.Title title="legal" className="text-black dark:text-white font-bold"/>
                             <Footer.LinkGroup col>
-                                <Footer.Link href="/privacy" target="_blank" rel="noopener noreferer"  >
+                                <Footer.Link href="/privacy">
                                     Privacy
                                 </Footer.Link>
-                                <Footer.Link href="/privacy" target="_blank" rel="noopener noreferer"  >
+                                <Footer.Link href="/privacy">
                                     Policy
                                 </Footer.Link>
                             </Footer.LinkGroup>
