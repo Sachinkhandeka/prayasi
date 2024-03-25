@@ -44,7 +44,7 @@ app.use(express.static((path.join(__dirname , '../client/dist'))));
 
 
 app.all("*" , (req ,res , next)=> {
-    next(new ExpressError(404 , "Route Not Found"));
+    res.sendFile(path.join(__dirname , "../client/dist" , "index.html"));
 });
 
 //custome error middleware 
